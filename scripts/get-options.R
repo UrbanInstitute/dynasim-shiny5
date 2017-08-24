@@ -16,7 +16,8 @@ get_option <- function(cell_range, asset) {
     mutate(Percentile = str_replace(Percentile, "the mean,    Mean", "100"),
            Percentile = str_replace_all(Percentile, "[^0-9/.]*", ""),
            Percentile = str_replace_all(Percentile, "\\.0*", ""),
-           Percentile = ifelse(str_detect(Percentile, "^$"), NA, Percentile)) %>%
+           Percentile = ifelse(str_detect(Percentile, "^$"), NA, Percentile),
+           Percentile = str_replace(Percentile, "100", "Mean")) %>%
     fill(Percentile) %>%
     filter(!Age %in% c("age", "All")) %>%
     mutate(Age = as.numeric(Age))

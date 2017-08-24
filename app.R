@@ -1,0 +1,193 @@
+## Libraries and Source Files
+library(shiny)
+library(tidyverse)
+library(scales)
+
+options(scipen = 999)
+
+# Source file for Windows
+Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
+source('urban_institute_themes/urban_theme_windows.R')
+
+# Source file for Mac
+#source('urban_institute_themes/urban_theme_mac.R')
+
+# Load Data
+
+options <- read_csv("data/options.csv",
+  col_types = cols(
+    Percentile = col_character(),
+    Age = col_integer(),
+    cohort = col_character(),
+    value = col_double(),
+    data_source = col_character(),
+    Asset = col_character()
+  ))
+
+validation <- read_csv("data/validation.csv",
+  col_types = cols(
+    Age = col_integer(),
+    Percentile = col_character(),
+    cohort = col_character(),
+    value = col_double(),
+    data_source = col_character(),
+    Asset = col_character()
+  ))
+
+ntiles <- bind_rows(options, validation) %>%
+  mutate(data_source = factor(data_source))
+
+rm(options, validation)
+
+##
+## Shiny
+##
+
+latoCSS <- "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic"
+
+ui <- fluidPage(
+  
+  tags$head(tags$link(rel = "stylesheet", type = "text/css", href = latoCSS)),
+  tags$head(tags$script(src = "pym.min.js")),
+  
+  theme = "shiny.css",
+  
+  fluidRow(
+    
+    column(12,
+           
+           titlePanel("Ntiles")
+    )
+  ),
+  
+  
+  fluidRow(
+    column(10,
+           style = "position:relative",
+           
+           h4(textOutput("title")),
+           h5(textOutput("subtitlea")),
+           h5(textOutput("subtitleb")),
+           
+           plotOutput("chart", width = "100%", height = "400px")
+           
+    )
+  ),
+  
+  fluidRow(
+  
+    column(6,
+           selectInput(inputId = "option",
+                       label = "Option",
+                       choices = c("DYNASIM" = "DYNASIM")
+           ),
+           
+           selectInput(inputId = "asset",
+                       label = "Asset",
+                       choices = c("Total Assets" = "Total Assets",
+                                   "Retirement Account Assets" = "Retirement Account Assets",
+                                   "Financial Assets" = "Financial Assets",
+                                   "Home Equity" = "Home Equity")
+           ),           
+
+           selectInput(inputId = "percentile",
+                       label = "Percentile or Mean",
+                       choices = c("Mean" = "Mean",
+                                   "5th Percentile" = "5",
+                                   "10th Percentile" = "10",
+                                   "20th Percentile" = "20",
+                                   "30th Percentile" = "30",
+                                   "40th Percentile" = "40",
+                                   "50th Percentile" = "50",
+                                   "60th Percentile" = "60",
+                                   "70th Percentile" = "70",
+                                   "80th Percentile" = "80",
+                                   "90th Percentile" = "90",
+                                   "95th Percentile" = "95",
+                                   "98th Percentile" = "98")
+           ),         
+           
+           selectInput(inputId = "cohort",
+                       label = "Cohort",
+                       choices = c("All Cohorts" = "All",
+                                   "1926-1930" = "1926-1930",
+                                   "1931-1935" = "1931-1935",
+                                   "1936-1940" = "1936-1940",
+                                   "1941-1945" = "1941-1945",
+                                   "1946-1950" = "1946-1950",
+                                   "1951-1955" = "1951-1955",
+                                   "1956-1960" = "1956-1960",
+                                   "1961-1965" = "1961-1965",
+                                   "1966-1970" = "1966-1970",
+                                   "1971-1975" = "1971-1975")
+           )      
+           
+    ), 
+        
+    column(6,
+           checkboxGroupInput(inputId = "data_source", 
+                              label = "Validation Data",
+                              choices = c("HRS" = "HRS",
+                                          "PSID" = "PSID",
+                                          "SCF" = "SCF",
+                                          "SIPP" = "SIPP"), 
+                              selected = c("HRS", "PSID", "SCF", "SIPP"))
+    )
+  
+  ),
+
+  fluidRow(
+    column(12,
+           downloadButton('download_data', 'Download Charted Data')
+    )
+  ),
+  
+  
+  tags$script(src = "activatePym.js")
+)
+
+server <- function(input, output) {
+  
+  options(shiny.sanitize.errors = FALSE)
+  
+  output$title <- renderText({
+    input$data_source
+  })
+  
+  output$subtitlea <- renderText({
+    "subtitlea"
+  })
+  
+  output$subtitleb <- renderText({
+    "subtitleb"
+  })
+  
+  data_subset <- reactive({
+    ntiles %>%
+      filter(
+            data_source %in% c(input$data_source, input$option),     
+            Percentile == input$percentile,
+            Asset == input$asset,
+            cohort == input$cohort)
+  })  
+  
+  output$chart <- renderPlot({  
+    
+    data_subset() %>%  
+      ggplot() +
+      geom_line(aes(x = Age, y = value, color = data_source)) +
+        scale_x_continuous(breaks = c(20, 30, 40, 50, 60, 70, 80, 90, 100)) +
+        theme(axis.line = element_blank())
+      
+  })  
+  
+  output$download_data <- downloadHandler(
+    filename = function() { paste0(input$option, '.csv') },
+    content = function(file) {
+      write_csv(data_subset(), file)
+    }
+  )
+  
+}
+
+shinyApp(ui = ui, server = server)
