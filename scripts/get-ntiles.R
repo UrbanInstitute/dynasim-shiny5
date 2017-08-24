@@ -142,4 +142,4 @@ rm(scf1, scf2, scf3, scf4,
    psid1, psid2, psid3, psid4,
    sipp1, sipp2, sipp3, sipp4)
 
-
+write_csv(ntiles_data, "data/validation.csv")
