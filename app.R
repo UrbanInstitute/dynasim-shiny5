@@ -74,6 +74,7 @@ ui <- fluidPage(
     )
   ),
   
+  
   fluidRow(
   
     column(6,
@@ -159,25 +160,26 @@ server <- function(input, output) {
   })
   
   output$subtitleb <- renderText({
-    "subtitleb"
+    str_c(input$asset, "/Average Earnings")
   })
   
   data_subset <- reactive({
     ntiles %>%
       filter(
-            data_source %in% c(input$data_source, input$option),     
             Percentile == input$percentile,
             Asset == input$asset,
-            cohort == input$cohort)
+            cohort == input$cohort) %>%
+      mutate(value_subset = ifelse(data_source %in% c(input$data_source, input$option), value, NA))
   })  
   
   output$chart <- renderPlot({  
     
     data_subset() %>%  
-      ggplot() +
-      geom_line(aes(x = Age, y = value, color = data_source)) +
+      ggplot(aes(x = Age, y = value_subset, color = data_source)) +
+      geom_line(size = 1) +
         scale_x_continuous(breaks = c(20, 30, 40, 50, 60, 70, 80, 90, 100)) +
-        theme(axis.line = element_blank())
+        labs(y = NULL) + 
+        theme(axis.line = element_blank()) 
       
   })  
   

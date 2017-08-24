@@ -30,7 +30,7 @@ get_option <- function(cell_range, asset) {
   
 }
 
-option1 <- get_option(cell_range = "B89:X932", asset = "Retirement Account Assets")
+option1 <- get_option(cell_range = "B2654:X3497", asset = "Retirement Account Assets")
 option2 <- get_option(cell_range = "B1799:X2642", asset = "Financial Assets")
 option3 <- get_option(cell_range = "B89:X932", asset = "Total Assets")
 option4 <- get_option(cell_range = "B944:X1787", asset = "Home Equity")
