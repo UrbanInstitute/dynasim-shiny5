@@ -56,7 +56,7 @@ ui <- fluidPage(
     
     column(12,
            
-           titlePanel("Ntiles")
+           titlePanel("DYNASIM Asset Validation")
     )
   ),
   
@@ -73,7 +73,6 @@ ui <- fluidPage(
            
     )
   ),
-  
   
   fluidRow(
   
@@ -143,6 +142,15 @@ ui <- fluidPage(
     )
   ),
   
+  br(),
+  br(),
+  br(),
+  br(),
+  br(),
+  br(),
+  br(),
+  br(),
+  br(),  
   
   tags$script(src = "activatePym.js")
 )
@@ -152,11 +160,15 @@ server <- function(input, output) {
   options(shiny.sanitize.errors = FALSE)
   
   output$title <- renderText({
-    input$data_source
+    
+    str_c(input$Percentile, input$asset, sep = " ")
+    
   })
   
   output$subtitlea <- renderText({
-    "subtitlea"
+    
+    str_c(input$cohort, " Cohorts", sep = " ")
+    
   })
   
   output$subtitleb <- renderText({

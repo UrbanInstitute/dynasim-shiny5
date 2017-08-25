@@ -2,11 +2,20 @@ library(readxl)
 library(stringr)
 library(tidyverse)
 
-ntiles <- "NtileByCohort912OPT0aug18v2.xlsx"
+"NtileByCohort912OPT0aug18v2.xlsx"
 
-get_option <- function(cell_range, asset) {
+# Load file paths
+filepaths <- read_csv("options-guide.csv",
+  col_types = cols(
+    option = col_character(),
+    option_name = col_character(),
+    filepath = col_character()
+  ))
+
+
+get_option <- function(link, cell_range, asset) {
   
-  option <- read_excel(ntiles, sheet = "dynasim912", col_names = FALSE, range = cell_range)
+  option <- read_excel(path = link, sheet = "dynasim912", col_names = FALSE, range = cell_range)
   
   names(option) <- c("Percentile", "Age", "low-1925", "1926-1930", "1931-1935", "1936-1940", "1941-1945", "1946-1950", 
                      "1951-1955", "1956-1960", "1961-1965", "1966-1970", "1971-1975", "1976-1985", "1986-1995", "1996-2005", "2006-2015", 
@@ -30,13 +39,22 @@ get_option <- function(cell_range, asset) {
   
 }
 
-option1 <- get_option(cell_range = "B2654:X3497", asset = "Retirement Account Assets")
-option2 <- get_option(cell_range = "B1799:X2642", asset = "Financial Assets")
-option3 <- get_option(cell_range = "B89:X932", asset = "Total Assets")
-option4 <- get_option(cell_range = "B944:X1787", asset = "Home Equity")
+iterate_option <- function(link, option_name) {
 
-ntiles_data <- bind_rows(option1, option2, option3, option4)
+  option1 <- get_option(link = link, cell_range = "B2654:X3497", asset = "Retirement Account Assets")
+  option2 <- get_option(link = link, cell_range = "B1799:X2642", asset = "Financial Assets")
+  option3 <- get_option(link = link, cell_range = "B89:X932", asset = "Total Assets")
+  option4 <- get_option(link = link, cell_range = "B944:X1787", asset = "Home Equity")
 
-rm(option1, option2, option3, option4)
+  ntiles_data <- bind_rows(option1, option2, option3, option4) %>%
+    mutate(option = option_name)
+    
+  rm(option1, option2, option3, option4)
+  
+  return(ntiles_data)
+}  
+
+ntiles_data <- map2(filepaths$filepath[1:14], filepaths$option_name[1:14], iterate_option) %>%
+  reduce(bind_rows)
 
 write_csv(ntiles_data, "data/options.csv")
