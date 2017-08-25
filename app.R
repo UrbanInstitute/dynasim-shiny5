@@ -34,8 +34,7 @@ validation <- read_csv("data/validation.csv",
     Asset = col_character()
   ))
 
-ntiles <- bind_rows(options, validation) %>%
-  mutate(data_source = factor(data_source))
+ntiles <- bind_rows(options, validation)
 
 rm(options, validation)
 
@@ -79,7 +78,20 @@ ui <- fluidPage(
     column(6,
            selectInput(inputId = "option",
                        label = "Option",
-                       choices = c("DYNASIM" = "DYNASIM")
+                       choices = c("Baseline" = "Baseline",
+                                   "Low Fees" = "Low Fees",
+                                   "Rebalance Every 5 Years" = "Rebalance Every 5 Years",
+                                   "Low Participation" = "Low Participation",
+                                   "High Participation" = "High Participation",
+                                   "Less Risk" = "Less Risk",
+                                   "More Risk" = "More Risk",
+                                   "No TDFs" = "No TDFs",
+                                   "No Auto-Enrollment" = "No Auto-Enrollment",
+                                   "No Cash Outs" = "No Cash Outs",
+                                   "All ROTH-401k Accounts A" = "All ROTH-401k Accounts A",
+                                   "All ROTH-401k Accounts B" = "All ROTH-401k Accounts B",
+                                   "Mandated Employer Plans (60%)" = "Mandated Employer Plans (60%)",
+                                   "Mandated Employer Plans (100%)" = "Mandated Employer Plans (100%)")
            ),
            
            selectInput(inputId = "asset",
@@ -181,7 +193,9 @@ server <- function(input, output) {
             Percentile == input$percentile,
             Asset == input$asset,
             cohort == input$cohort) %>%
-      mutate(value_subset = ifelse(data_source %in% c(input$data_source, input$option), value, NA))
+            filter(data_source %in% c(input$option, "HRS", "PSID", "SCF", "SIPP")) %>%
+      mutate(value_subset = ifelse(data_source %in% c(input$data_source, input$option), value, NA)) %>%
+      mutate(data_source = factor(data_source, levels = unique(data_source)))
   })  
   
   output$chart <- renderPlot({  
