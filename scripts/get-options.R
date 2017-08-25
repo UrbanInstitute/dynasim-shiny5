@@ -13,7 +13,7 @@ filepaths <- read_csv("options-guide.csv",
   ))
 
 
-get_option <- function(link, cell_range, asset) {
+get_option <- function(link, cell_range, asset, option_name) {
   
   option <- read_excel(path = link, sheet = "dynasim912", col_names = FALSE, range = cell_range)
   
@@ -32,7 +32,7 @@ get_option <- function(link, cell_range, asset) {
     mutate(Age = as.numeric(Age))
     
   option <- gather(option, key = "cohort", value = "value", -Age, -Percentile) %>%
-    mutate(data_source = "DYNASIM", 
+    mutate(data_source = option_name, 
            Asset = asset)
   
   return(option)
@@ -41,13 +41,12 @@ get_option <- function(link, cell_range, asset) {
 
 iterate_option <- function(link, option_name) {
 
-  option1 <- get_option(link = link, cell_range = "B2654:X3497", asset = "Retirement Account Assets")
-  option2 <- get_option(link = link, cell_range = "B1799:X2642", asset = "Financial Assets")
-  option3 <- get_option(link = link, cell_range = "B89:X932", asset = "Total Assets")
-  option4 <- get_option(link = link, cell_range = "B944:X1787", asset = "Home Equity")
+  option1 <- get_option(link = link, cell_range = "B2654:X3497", asset = "Retirement Account Assets", option_name = option_name)
+  option2 <- get_option(link = link, cell_range = "B1799:X2642", asset = "Financial Assets", option_name = option_name)
+  option3 <- get_option(link = link, cell_range = "B89:X932", asset = "Total Assets", option_name = option_name)
+  option4 <- get_option(link = link, cell_range = "B944:X1787", asset = "Home Equity", option_name = option_name)
 
-  ntiles_data <- bind_rows(option1, option2, option3, option4) %>%
-    mutate(option = option_name)
+  ntiles_data <- bind_rows(option1, option2, option3, option4)
     
   rm(option1, option2, option3, option4)
   
