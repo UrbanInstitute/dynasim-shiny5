@@ -189,13 +189,12 @@ server <- function(input, output) {
   
   data_subset <- reactive({
     ntiles %>%
-      filter(
-            Percentile == input$percentile,
-            Asset == input$asset,
-            cohort == input$cohort) %>%
-            filter(data_source %in% c(input$option, "HRS", "PSID", "SCF", "SIPP")) %>%
-      mutate(value_subset = ifelse(data_source %in% c(input$data_source, input$option), value, NA)) %>%
-      mutate(data_source = factor(data_source, levels = unique(data_source)))
+      filter(Percentile == input$percentile,
+             Asset == input$asset,
+             cohort == input$cohort,
+             data_source %in% c(input$option, "HRS", "PSID", "SCF", "SIPP")) %>%
+      mutate(value_subset = ifelse(data_source %in% c(input$data_source, input$option), value, NA),
+             data_source = factor(data_source, levels = unique(data_source)))
   })  
   
   output$chart <- renderPlot({  
