@@ -1,6 +1,7 @@
 ## Libraries and Source Files
 library(shiny)
 library(tidyverse)
+library(stringr)
 library(scales)
 
 options(scipen = 999)
