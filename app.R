@@ -15,6 +15,18 @@ source('urban_institute_themes/urban_theme_windows.R')
 
 # Load Data
 
+option_text <- read_csv("text/option.csv",
+  col_types = cols(
+    option = col_character(),
+    text = col_character()
+  ))
+
+option_asset <- read_csv("text/asset.csv",
+  col_types = cols(
+    asset = col_character(),
+    text = col_character()
+  ))
+
 options <- read_csv("data/options.csv",
   col_types = cols(
     Percentile = col_character(),
@@ -56,7 +68,7 @@ ui <- fluidPage(
     
     column(12,
            
-           titlePanel("DYNASIM Asset Validation")
+           p("blurb")
     )
   ),
   
@@ -80,27 +92,27 @@ ui <- fluidPage(
            selectInput(inputId = "option",
                        label = "Option",
                        choices = c("Baseline" = "Baseline",
-                                   "Low Fees" = "Low Fees",
-                                   "Rebalance Every 5 Years" = "Rebalance Every 5 Years",
-                                   "Low Participation" = "Low Participation",
-                                   "High Participation" = "High Participation",
-                                   "Less Risk" = "Less Risk",
-                                   "More Risk" = "More Risk",
-                                   "No TDFs" = "No TDFs",
-                                   "No Auto-Enrollment" = "No Auto-Enrollment",
-                                   "No Cash Outs" = "No Cash Outs",
-                                   "All ROTH-401k Accounts A" = "All ROTH-401k Accounts A",
-                                   "All ROTH-401k Accounts B" = "All ROTH-401k Accounts B",
-                                   "Mandated Employer Plans (60%)" = "Mandated Employer Plans (60%)",
-                                   "Mandated Employer Plans (100%)" = "Mandated Employer Plans (100%)")
+                                   "Low fees" = "Low fees",
+                                   "Rebalance every 5 years" = "Rebalance every 5 years",
+                                   "Low participation" = "Low participation",
+                                   "High participation" = "High participation",
+                                   "Less risk" = "Less risk",
+                                   "More risk" = "More risk",
+                                   "No target date funds" = "No target date funds",
+                                   "No auto-enrollment" = "No auto-enrollment",
+                                   "No cash outs" = "No cash outs",
+                                   "All Roth-401k accounts #1" = "All Roth-401k accounts #1",
+                                   "All Roth-401k accounts #2" = "All Roth-401k accounts #2",
+                                   "Mandated employer plans (60%)" = "Mandated employer plans (60%)",
+                                   "Mandated employer plans (100%)" = "Mandated employer plans (100%)")
            ),
            
            selectInput(inputId = "asset",
                        label = "Asset",
-                       choices = c("Total Assets" = "Total Assets",
-                                   "Retirement Account Assets" = "Retirement Account Assets",
-                                   "Financial Assets" = "Financial Assets",
-                                   "Home Equity" = "Home Equity")
+                       choices = c("Total assets" = "Total assets",
+                                   "Retirement account assets" = "Retirement account assets",
+                                   "Financial assets" = "Financial assets",
+                                   "Home equity" = "Home equity")
            ),           
 
            selectInput(inputId = "percentile",
@@ -149,6 +161,8 @@ ui <- fluidPage(
   
   ),
 
+  br(),
+  
   fluidRow(
     column(12,
            downloadButton('download_data', 'Download Charted Data')
@@ -156,6 +170,38 @@ ui <- fluidPage(
   ),
   
   br(),
+  
+  fluidRow(
+    
+    column(12,
+           
+           # Explanation of Social Security Reform
+           
+           htmlOutput("text_option")
+    )
+  ),
+  
+  fluidRow(
+    
+    column(12,
+           
+           # Explanation of asset
+           
+           htmlOutput("text_asset")
+    )
+    
+  ),
+  
+  
+  fluidRow(
+    column(12,
+           
+      htmlOutput("blurb")     
+      
+    )
+  
+  ),
+  
   br(),
   br(),
   br(),
@@ -215,7 +261,27 @@ server <- function(input, output) {
       write_csv(data_subset(), file)
     }
   )
+ 
+  output$text_option <- renderText({
+    
+    as.character(
+      option_text %>%
+        filter(option == input$option) %>%
+        select(text)
+    )
+    
+  })
+   
   
+  output$text_asset <- renderText({
+    
+    as.character(
+      option_asset %>%
+        filter(asset == input$asset) %>%
+        select(text)
+    )
+    
+  })
 }
 
 shinyApp(ui = ui, server = server)

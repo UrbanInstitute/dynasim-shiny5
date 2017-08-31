@@ -41,10 +41,10 @@ get_option <- function(link, cell_range, asset, option_name) {
 
 iterate_option <- function(link, option_name) {
 
-  option1 <- get_option(link = link, cell_range = "B2654:X3497", asset = "Retirement Account Assets", option_name = option_name)
-  option2 <- get_option(link = link, cell_range = "B1799:X2642", asset = "Financial Assets", option_name = option_name)
-  option3 <- get_option(link = link, cell_range = "B89:X932", asset = "Total Assets", option_name = option_name)
-  option4 <- get_option(link = link, cell_range = "B944:X1787", asset = "Home Equity", option_name = option_name)
+  option1 <- get_option(link = link, cell_range = "B2654:X3497", asset = "Retirement account assets", option_name = option_name)
+  option2 <- get_option(link = link, cell_range = "B1799:X2642", asset = "Financial assets", option_name = option_name)
+  option3 <- get_option(link = link, cell_range = "B89:X932", asset = "Total assets", option_name = option_name)
+  option4 <- get_option(link = link, cell_range = "B944:X1787", asset = "Home equity", option_name = option_name)
 
   ntiles_data <- bind_rows(option1, option2, option3, option4)
     
