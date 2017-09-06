@@ -68,7 +68,12 @@ ui <- fluidPage(
     
     column(12,
            
-           p("blurb")
+           p("Long-run projections are sensitive to small changes in data and 
+              assumptions. Use this interactive tool to compare changes in 
+              DYNASIM's assumptions for defined-contribution pensions with data 
+             from the Health and Retirement Study, Panel Study of Income 
+             Dynamics, Survey of Consumer Finances, and Survey of Income and 
+             Program Participation. ")
     )
   ),
   
@@ -102,9 +107,10 @@ ui <- fluidPage(
                                    "No auto-enrollment" = "No auto-enrollment",
                                    "No cash outs" = "No cash outs",
                                    "All Roth-401k accounts #1" = "All Roth-401k accounts #1",
-                                   "All Roth-401k accounts #2" = "All Roth-401k accounts #2",
-                                   "Mandated employer plans (60%)" = "Mandated employer plans (60%)",
-                                   "Mandated employer plans (100%)" = "Mandated employer plans (100%)")
+                                   "All Roth-401k accounts #2" = "All Roth-401k accounts #2")
+                       
+                                   #"Mandated employer plans (60%)" = "Mandated employer plans (60%)",
+                                   #"Mandated employer plans (100%)" = "Mandated employer plans (100%)")
            ),
            
            selectInput(inputId = "asset",
