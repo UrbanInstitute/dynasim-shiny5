@@ -14,18 +14,19 @@ source('urban_institute_themes/urban_theme_windows.R')
 #source('urban_institute_themes/urban_theme_mac.R')
 
 # Load Data
-
 option_text <- read_csv("text/option.csv",
   col_types = cols(
     option = col_character(),
     text = col_character()
-  ))
+  )
+)
 
 option_asset <- read_csv("text/asset.csv",
   col_types = cols(
     asset = col_character(),
     text = col_character()
-  ))
+  )
+)
 
 options <- read_csv("data/options.csv",
   col_types = cols(
@@ -35,7 +36,8 @@ options <- read_csv("data/options.csv",
     value = col_double(),
     data_source = col_character(),
     Asset = col_character()
-  ))
+  )
+)
 
 validation <- read_csv("data/validation.csv",
   col_types = cols(
@@ -45,7 +47,8 @@ validation <- read_csv("data/validation.csv",
     value = col_double(),
     data_source = col_character(),
     Asset = col_character()
-  ))
+  )
+)
 
 ntiles <- bind_rows(options, validation)
 
@@ -107,10 +110,9 @@ ui <- fluidPage(
                                    "No auto-enrollment" = "No auto-enrollment",
                                    "No cash outs" = "No cash outs",
                                    "All Roth-401k accounts #1" = "All Roth-401k accounts #1",
-                                   "All Roth-401k accounts #2" = "All Roth-401k accounts #2")
-                       
-                                   #"Mandated employer plans (60%)" = "Mandated employer plans (60%)",
-                                   #"Mandated employer plans (100%)" = "Mandated employer plans (100%)")
+                                   "All Roth-401k accounts #2" = "All Roth-401k accounts #2",
+                                   "Mandated employer plans (60%)" = "Mandated employer plans (60%)",
+                                   "Mandated employer plans (100%)" = "Mandated employer plans (100%)")
            ),
            
            selectInput(inputId = "asset",
@@ -158,11 +160,12 @@ ui <- fluidPage(
     column(6,
            checkboxGroupInput(inputId = "data_source", 
                               label = "Validation Data",
-                              choices = c("HRS" = "HRS",
+                              choices = c("Baseline" = "Baseline",
+                                          "HRS" = "HRS",
                                           "PSID" = "PSID",
                                           "SCF" = "SCF",
                                           "SIPP" = "SIPP"), 
-                              selected = c("HRS", "PSID", "SCF", "SIPP"))
+                              selected = c("Baseline", "HRS", "PSID", "SCF", "SIPP"))
     )
   
   ),
@@ -237,17 +240,34 @@ server <- function(input, output) {
   })
   
   output$subtitleb <- renderText({
-    str_c(input$asset, "/Average Earnings")
+    str_c(input$asset, "/average earnings")
   })
   
   data_subset <- reactive({
     ntiles %>%
-      filter(Percentile == input$percentile,
-             Asset == input$asset,
-             cohort == input$cohort,
-             data_source %in% c(input$option, "HRS", "PSID", "SCF", "SIPP")) %>%
+      filter(Percentile == input$percentile) %>%
+      filter(Asset == input$asset) %>%
+      filter(cohort == input$cohort) %>%
+      filter(data_source %in% c("Baseline", "HRS", "PSID", "SCF", "SIPP", input$option)) %>%
       mutate(value_subset = ifelse(data_source %in% c(input$data_source, input$option), value, NA),
-             data_source = factor(data_source, levels = unique(data_source)))
+             data_source = factor(data_source, levels = c("Baseline",
+                                                          "HRS",
+                                                          "PSID",
+                                                          "SCF",
+                                                          "SIPP",
+                                                          "Low fees",
+                                                          "Rebalance every 5 years",
+                                                          "Low participation",
+                                                          "High participation",
+                                                          "Less risk",
+                                                          "More risk",
+                                                          "No target date funds",
+                                                          "No auto-enrollment",
+                                                          "No cash outs",
+                                                          "All Roth-401k accounts #1",
+                                                          "All Roth-401k accounts #2",
+                                                          "Mandated employer plans (60%)",
+                                                          "Mandated employer plans (100%)")))
   })  
   
   output$chart <- renderPlot({  
