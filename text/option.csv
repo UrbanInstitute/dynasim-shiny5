@@ -1,41 +1,15 @@
 option,text
-Baseline,<h4>Baseline</h4><p></p>
-Low fees,<h4>Low fees</h4><p></p>
-Rebalance every 5 years,<h4>Rebalance every 5 years</h4><p></p>
-Low participation,<h4>Low participation</h4><p></p>
-High participation,<h4>High participation</h4><p></p>
-Less risk,<h4>Less risk</h4><p></p>
-More risk,<h4>More risk</h4><p></p>
-No target date funds,<h4>No target date funds</h4><p></p>
-No auto-enrollment,<h4>No auto-enrollment</h4><p></p>
-No cash outs,<h4>No cash outs</h4><p></p>
-All Roth-401k accounts #1,<h4>All Roth-401k accounts #1</h4><p></p>
-All Roth-401k accounts #2,<h4>All Roth-401k accounts #2</h4><p></p>
-Mandated employer plans (60%),<h4>Mandated employer plans (60%)</h4><p></p>
-Mandated employer plans (100%),<h4>Mandated employer plans (100%)</h4><p></p>
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
+Baseline,"<h4>Baseline</h4><p>Assumes that current public policies, business practices, and individual behaviors continue.</p>"
+Reduce fees,<h4>Reduce fees</h4><p>DYNASIM subtracts one percentage point from both stock and bond returns for administrative fees. This simulation lowers the fee to 0.5 percentage points for both stock and bonds.</p>
+Rebalance every 5 years,<h4>Rebalance every 5 years</h4><p>Rebalance stock and bond allocations every five years instead of every year.</p>
+Low participation,"<h4>Low participation</h4><p>Decrease the calculated probability of worker contributions, conditional on having an offer by 15 percent: multiply the baseline predicted probability by 0.85.</p>"
+High participation,"<h4>High participation</h4><p>Increase the calculated probability of worker contributions, conditional on having an offer by 15 percent: multiply the baseline predicted probability by 1.15.</p>"
+Less risk,<h4>Less risk</h4><p>The low risk scenario has workers invest in the least aggressive (lowest share in stocks) among DYNASIM’s 41 target date funds (PIMCO RealRetirement Series).</p>
+More risk,<h4>More risk</h4><p>The high-risk scenario has all workers invest in the most aggressive (highest share in stocks) among DYNASIM’s 41 target date funds (Guidestone Funds MyDestination Series).</p>
+No target date funds,<h4>No target date funds</h4><p>Eliminate the option to invest in target date funds.</p>
+No auto-enrollment,<h4>No auto-enrollment</h4><p>Remove the boost in participation probability for workers in firms with automatic enrollment. </p>
+No cash outs,<h4>No cash outs</h4><p>Don’t let workers take early distributions (cash out) from DC or Roth savings. </p>
+All Roth-401k accounts #1,"<h4>All Roth-401k accounts #1</h4><p>Invest year 2014 after-tax DC contributions to a Roth 401k account, then use baseline pension assumptions after 2014. Examine the net present value of tax lifetime taxes and retirement savings.</p>"
+All Roth-401k accounts #2,"<h4>All Roth-401k accounts #2</h4><p>Beginning in 2014, invest all pre-tax DC contributions to a ROTH-401k account. Examine the net present value of tax lifetime taxes and retirement savings. This option assumes workers reduce total annual consumption to offset the additional income taxes on ROTH contributions that are not tax deferred.</p>"
+Mandated employer plans (60%),"<h4>Mandated employer plans (60%)</h4><p>Mandates Roth IRA plans for all firms with 10 or more workers. The plans have automatic enrollment, 3% default investments in target date funds, and Roth AGI limits. 60% of participants use default settings.</p>"
+Mandated employer plans (100%),"<h4>Mandated employer plans (100%)</h4><p>Mandates Roth IRA plans for all firms with 10 or more workers. The plans have automatic enrollment, 3% default investments in target date funds, and Roth AGI limits. 60% of participants use default settings. Mandated employer plan candidates are forced to participate and cash outs are eliminated.</p>"

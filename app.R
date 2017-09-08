@@ -174,7 +174,7 @@ ui <- fluidPage(
   
   fluidRow(
     column(12,
-           downloadButton('download_data', 'Download Charted Data')
+           downloadButton('download_data', 'Download charted data')
     )
   ),
   
@@ -205,7 +205,28 @@ ui <- fluidPage(
   fluidRow(
     column(12,
            
-      htmlOutput("blurb")     
+      HTML("<h4><a href='http://hrsonline.isr.umich.edu/'>Health and Retirement 
+           Study:</a></h4><p>A national longitudinal study of approximately 
+           20,000 respondents ages fifty and older that asks questions about 
+           assets, health care, housing, and pensions. The study is conducted 
+           every two years and began in 1992.</p>"),
+      HTML("<h4><a href='https://psidonline.isr.umich.edu/'>Panel Study of 
+           Income Dynamics:</a></h4><p>A national longitudinal study of more 
+           than 18,000 individuals in 5,000 families that asks questions about 
+           employment, income, wealth, expenditures, health, marriage, 
+           childbearing, child development, philanthropy, and education. 
+           Families were asked questions annually from 1968 to 1997 and every 
+           other year after 1997.</p> "),
+      HTML("<h4><a href='https://www.federalreserve.gov/econres/scfindex.htm'>Survey of Consumer Finances:</a></h4>
+           <p>A national cross-sectional study of approximately 6,500 families 
+           that focuses on balance sheets, pensions, income, and demographic 
+           characteristics. The survey is conducted every three years and dates 
+           back to 1983.</p> "),
+      HTML("<h4><a href='https://www.census.gov/sipp/'>Survey of Income and 
+           Program Participation:</a></h4><p>A continuous series of national 
+           panels of 14,000 to 52,000 households that focuses on the interaction 
+           between tax, transfer, and other government and private policies. 
+           The survey began in 1983 and includes monthly data.</p>")
       
     )
   
