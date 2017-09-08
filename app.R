@@ -1,7 +1,6 @@
 ## Libraries and Source Files
 library(shiny)
 library(tidyverse)
-library(stringr)
 library(scales)
 
 options(scipen = 999)
@@ -312,19 +311,15 @@ server <- function(input, output) {
   options(shiny.sanitize.errors = FALSE)
   
   output$title <- renderText({
-    
-    str_c(input$Percentile, input$asset, sep = " ")
-    
+    paste(input$Percentile, input$asset, sep = " ")
   })
   
   output$subtitlea <- renderText({
-    
-    str_c(input$cohort, " Cohorts", sep = " ")
-    
+    paste(input$cohort, " Cohorts", sep = " ")
   })
   
   output$subtitleb <- renderText({
-    str_c(input$asset, "/average earnings")
+    paste(input$asset, "/average earnings")
   })
   
   filter_df <- function(df) {
@@ -333,7 +328,7 @@ server <- function(input, output) {
       filter(cohort == input$cohort) %>%
       filter(data_source %in% c("Baseline", "HRS", "PSID", "SCF", "SIPP", input$option)) %>%
       select_("Age", "cohort", "data_source", value_subset = input$percentile) %>%
-      mutate(value_subset = if_else(data_source %in% c(input$data_source, input$option), value_subset, as.numeric(NA)))
+      mutate(value_subset = if_else(data_source %in% c(input$data_source, input$option), as.numeric(value_subset), as.numeric(NA)))
   } 
     
   data_subset <- reactive({
