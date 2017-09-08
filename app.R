@@ -28,31 +28,101 @@ option_asset <- read_csv("text/asset.csv",
   )
 )
 
-options <- read_csv("data/options.csv",
+
+factor_order <- c("Baseline", "HRS", "PSID", "SCF", "SIPP", "Reduce fees",
+                  "Rebalance every 5 years", "Low participation",
+                  "High participation", "Less risk","More risk",
+                  "No target date funds", "No auto-enrollment",
+                  "No cash outs", "All Roth-401k accounts #1",
+                  "All Roth-401k accounts #2",
+                  "Mandated employer plans (60%)",
+                  "Mandated employer plans (100%)")
+
+financial <- read_csv("data/financial-assets.csv",
   col_types = cols(
-    Percentile = col_character(),
     Age = col_integer(),
     cohort = col_character(),
-    value = col_double(),
     data_source = col_character(),
-    Asset = col_character()
+    `10th Percentile` = col_double(),
+    `20th Percentile` = col_double(),
+    `30th Percentile` = col_double(),
+    `40th Percentile` = col_double(),
+    `5th percentile` = col_double(),
+    `50th Percentile` = col_double(),
+    `60th Percentile` = col_double(),
+    `70th Percentile` = col_double(),
+    `80th Percentile` = col_double(),
+    `90th Percentile` = col_double(),
+    `95th Percentile` = col_double(),
+    `98th Percentile` = col_double(),
+    Mean = col_double()
   )
-)
+) %>% mutate(data_source = factor(data_source, levels = factor_order))
 
-validation <- read_csv("data/validation.csv",
+
+
+home_equity <- read_csv("data/home-equity.csv", 
   col_types = cols(
     Age = col_integer(),
-    Percentile = col_character(),
     cohort = col_character(),
-    value = col_double(),
     data_source = col_character(),
-    Asset = col_character()
+    `10th Percentile` = col_double(),
+    `20th Percentile` = col_double(),
+    `30th Percentile` = col_double(),
+    `40th Percentile` = col_double(),
+    `5th percentile` = col_double(),
+    `50th Percentile` = col_double(),
+    `60th Percentile` = col_double(),
+    `70th Percentile` = col_double(),
+    `80th Percentile` = col_double(),
+    `90th Percentile` = col_double(),
+    `95th Percentile` = col_double(),
+    `98th Percentile` = col_double(),
+    Mean = col_double()
   )
-)
+) %>% mutate(data_source = factor(data_source, levels = factor_order))
 
-ntiles <- bind_rows(options, validation)
+retirement_account <- read_csv("data/retirement-account-assets.csv", col_types = 
+  cols(
+    Age = col_integer(),
+    cohort = col_character(),
+    data_source = col_character(),
+    `10th Percentile` = col_integer(),
+    `20th Percentile` = col_double(),
+    `30th Percentile` = col_double(),
+    `40th Percentile` = col_double(),
+    `5th percentile` = col_integer(),
+    `50th Percentile` = col_double(),
+    `60th Percentile` = col_double(),
+    `70th Percentile` = col_double(),
+    `80th Percentile` = col_double(),
+    `90th Percentile` = col_double(),
+    `95th Percentile` = col_double(),
+    `98th Percentile` = col_double(),
+    Mean = col_double()
+  )
+) %>% mutate(data_source = factor(data_source, levels = factor_order))
 
-rm(options, validation)
+total <- read_csv("data/total-assets.csv",
+  col_types = cols(
+    Age = col_integer(),
+    cohort = col_character(),
+    data_source = col_character(),
+    `10th Percentile` = col_double(),
+    `20th Percentile` = col_double(),
+    `30th Percentile` = col_double(),
+    `40th Percentile` = col_double(),
+    `5th percentile` = col_double(),
+    `50th Percentile` = col_double(),
+    `60th Percentile` = col_double(),
+    `70th Percentile` = col_double(),
+    `80th Percentile` = col_double(),
+    `90th Percentile` = col_double(),
+    `95th Percentile` = col_double(),
+    `98th Percentile` = col_double(),
+    Mean = col_double()
+  )
+) %>% mutate(data_source = factor(data_source, levels = factor_order))
 
 ##
 ## Shiny
@@ -100,7 +170,7 @@ ui <- fluidPage(
            selectInput(inputId = "option",
                        label = "Option",
                        choices = c("Baseline" = "Baseline",
-                                   "Low fees" = "Low fees",
+                                   "Reduce fees" = "Reduce fees",
                                    "Rebalance every 5 years" = "Rebalance every 5 years",
                                    "Low participation" = "Low participation",
                                    "High participation" = "High participation",
@@ -126,18 +196,18 @@ ui <- fluidPage(
            selectInput(inputId = "percentile",
                        label = "Percentile or Mean",
                        choices = c("Mean" = "Mean",
-                                   "5th Percentile" = "5",
-                                   "10th Percentile" = "10",
-                                   "20th Percentile" = "20",
-                                   "30th Percentile" = "30",
-                                   "40th Percentile" = "40",
-                                   "50th Percentile" = "50",
-                                   "60th Percentile" = "60",
-                                   "70th Percentile" = "70",
-                                   "80th Percentile" = "80",
-                                   "90th Percentile" = "90",
-                                   "95th Percentile" = "95",
-                                   "98th Percentile" = "98")
+                                   "5th Percentile" = "`5th Percentile`",
+                                   "10th Percentile" = "`10th Percentile`",
+                                   "20th Percentile" = "`20th Percentile`",
+                                   "30th Percentile" = "`30th Percentile`",
+                                   "40th Percentile" = "`40th Percentile`",
+                                   "50th Percentile" = "`50th Percentile`",
+                                   "60th Percentile" = "`60th Percentile`",
+                                   "70th Percentile" = "`70th Percentile`",
+                                   "80th Percentile" = "`80th Percentile`",
+                                   "90th Percentile" = "`90th Percentile`",
+                                   "95th Percentile" = "`95th Percentile`",
+                                   "98th Percentile" = "`98th Percentile`")
            ),         
            
            selectInput(inputId = "cohort",
@@ -233,13 +303,6 @@ ui <- fluidPage(
   ),
   
   br(),
-  br(),
-  br(),
-  br(),
-  br(),
-  br(),
-  br(),
-  br(),  
   
   tags$script(src = "activatePym.js")
 )
@@ -264,31 +327,27 @@ server <- function(input, output) {
     str_c(input$asset, "/average earnings")
   })
   
-  data_subset <- reactive({
-    ntiles %>%
-      filter(Percentile == input$percentile) %>%
-      filter(Asset == input$asset) %>%
+  filter_df <- function(df) {
+    
+    df %>%
       filter(cohort == input$cohort) %>%
       filter(data_source %in% c("Baseline", "HRS", "PSID", "SCF", "SIPP", input$option)) %>%
-      mutate(value_subset = ifelse(data_source %in% c(input$data_source, input$option), value, NA),
-             data_source = factor(data_source, levels = c("Baseline",
-                                                          "HRS",
-                                                          "PSID",
-                                                          "SCF",
-                                                          "SIPP",
-                                                          "Low fees",
-                                                          "Rebalance every 5 years",
-                                                          "Low participation",
-                                                          "High participation",
-                                                          "Less risk",
-                                                          "More risk",
-                                                          "No target date funds",
-                                                          "No auto-enrollment",
-                                                          "No cash outs",
-                                                          "All Roth-401k accounts #1",
-                                                          "All Roth-401k accounts #2",
-                                                          "Mandated employer plans (60%)",
-                                                          "Mandated employer plans (100%)")))
+      select_("Age", "cohort", "data_source", value_subset = input$percentile) %>%
+      mutate(value_subset = if_else(data_source %in% c(input$data_source, input$option), value_subset, as.numeric(NA)))
+  } 
+    
+  data_subset <- reactive({
+    
+    if (input$asset == "Total assets") {
+      filter_df(total)
+    } else if (input$asset == "Retirement account assets") {
+      filter_df(retirement_account)      
+    } else if (input$asset == "Financial assets") {
+      filter_df(financial)      
+    } else if (input$asset == "Home equity") {
+      filter_df(home_equity)      
+    }
+    
   })  
   
   output$chart <- renderPlot({  
@@ -301,6 +360,29 @@ server <- function(input, output) {
         theme(axis.line = element_blank()) 
       
   })  
+  
+  
+  
+  
+  financial %>%
+    filter(cohort == "All") %>%
+    filter(data_source %in% c("Baseline", "HRS", "PSID", "SCF", "SIPP")) %>%
+    select_("Age", "cohort", "data_source", "`90th Percentile`") %>% 
+    ggplot(aes(Age, `90th Percentile`, color = data_source)) +
+    geom_line()
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   output$download_data <- downloadHandler(
     filename = function() { paste0(input$option, '.csv') },

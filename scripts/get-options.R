@@ -2,8 +2,6 @@ library(readxl)
 library(stringr)
 library(tidyverse)
 
-"NtileByCohort912OPT0aug18v2.xlsx"
-
 # Load file paths
 filepaths <- read_csv("options-guide.csv",
   col_types = cols(

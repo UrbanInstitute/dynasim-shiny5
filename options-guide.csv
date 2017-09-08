@@ -1,7 +1,7 @@
 option,option_name,filepath
 OPT0,Baseline,X:\programs\run912\opt0\NtileByCohort912OPT0.xlsx
 DOL5yrRebalance,Rebalance every 5 years,X:\programs\run912\DOL5yrRebalance\NtileByCohort912DOL5yrRebalance.xlsx
-DOLLowFee,Low fees,X:\programs\run912\DOLlowfee\NtileByCohort912DOLLowFee.xlsx
+DOLLowFee,Reduce fees,X:\programs\run912\DOLlowfee\NtileByCohort912DOLLowFee.xlsx
 DOLNoTDF,No target date funds,X:\programs\run912\DOLNoTDF\NtileByCohort912DOLNoTDF.xlsx
 DOLhighPart,High participation,X:\programs\run912\DOLhighPart\NtileByCohort912highPart.xlsx
 DOLlessRisk,Less risk,X:\programs\run912\DOLlessRISK\NtileByCohort912lessRisk.xlsx
