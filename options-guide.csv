@@ -1,15 +1,15 @@
 option,option_name,filepath
 OPT0,Baseline,X:\programs\run912\opt0\NtileByCohort912OPT0.xlsx
-DOL5yrRebalance,Rebalance Every 5 Years,X:\programs\run912\DOL5yrRebalance\NtileByCohort912DOL5yrRebalance.xlsx
-DOLLowFee,Low Fees,X:\programs\run912\DOLlowfee\NtileByCohort912DOLLowFee.xlsx
-DOLNoTDF,No TDFs,X:\programs\run912\DOLNoTDF\NtileByCohort912DOLNoTDF.xlsx
-DOLhighPart,High Participation,X:\programs\run912\DOLhighPart\NtileByCohort912highPart.xlsx
-DOLlessRisk,Less Risk,X:\programs\run912\DOLlessRISK\NtileByCohort912lessRisk.xlsx
-DOLlowPart,Low Participation,X:\programs\run912\DOLlowPart\NtileByCohort912lowPart.xlsx
-DOLmoreRisk,More Risk,X:\programs\run912\DOLmoreRisk\NtileByCohort912moreRisk.xlsx
-NoAUTO,No Auto-Enrollment,X:\programs\run912\NoAUTO\NtileByCohort912NOAUTO.xlsx
-NoCashOut,No Cash Outs,X:\programs\run912\NoCashout\NtileByCohort912NoCashout.xlsx
-NPVAllRoth,All ROTH-401k Accounts A,X:\programs\run912\NPVallroth\NtileByCohort912NPVallroth.xlsx
-NPVRothSaver,All ROTH-401k Accounts B,X:\programs\run912\NPVRothSaver\NtileByCohort912NPVRothSaver.xlsx
-RothIRA2,Mandated Employer Plans (60%),X:\programs\run912\RothIRA2\NtileByCohort912RothIRA2.xlsx
-RothIRA2AllPart,Mandated Employer Plans (100%),X:\programs\run912\RothIRA2allpart\NtileByCohort912RothIRA2allpart.xlsx
+DOL5yrRebalance,Rebalance every 5 years,X:\programs\run912\DOL5yrRebalance\NtileByCohort912DOL5yrRebalance.xlsx
+DOLLowFee,Low fees,X:\programs\run912\DOLlowfee\NtileByCohort912DOLLowFee.xlsx
+DOLNoTDF,No target date funds,X:\programs\run912\DOLNoTDF\NtileByCohort912DOLNoTDF.xlsx
+DOLhighPart,High participation,X:\programs\run912\DOLhighPart\NtileByCohort912highPart.xlsx
+DOLlessRisk,Less risk,X:\programs\run912\DOLlessRISK\NtileByCohort912lessRisk.xlsx
+DOLlowPart,Low participation,X:\programs\run912\DOLlowPart\NtileByCohort912lowPart.xlsx
+DOLmoreRisk,More risk,X:\programs\run912\DOLmoreRisk\NtileByCohort912moreRisk.xlsx
+NoAUTO,No auto-enrollment,X:\programs\run912\NoAUTO\NtileByCohort912NOAUTO.xlsx
+NoCashOut,No cash outs,X:\programs\run912\NoCashout\NtileByCohort912NoCashout.xlsx
+NPVAllRoth,All Roth-401k accounts #1,X:\programs\run912\NPVallroth\NtileByCohort912NPVallroth.xlsx
+NPVRothSaver,All Roth-401k accounts #2,X:\programs\run912\NPVRothSaver\NtileByCohort912NPVRothSaver.xlsx
+RothIRA2,Mandated employer plans (60%),X:\programs\run912\RothIRA2\NtileByCohort912RothIRA2.xlsx
+RothIRA2AllPart,Mandated employer plans (100%),X:\programs\run912\RothIRA2allpart\NtileByCohort912RothIRA2allpart.xlsx

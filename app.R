@@ -1,6 +1,7 @@
 ## Libraries and Source Files
 library(shiny)
 library(tidyverse)
+library(stringr)
 library(scales)
 
 options(scipen = 999)
@@ -13,6 +14,19 @@ source('urban_institute_themes/urban_theme_windows.R')
 #source('urban_institute_themes/urban_theme_mac.R')
 
 # Load Data
+option_text <- read_csv("text/option.csv",
+  col_types = cols(
+    option = col_character(),
+    text = col_character()
+  )
+)
+
+option_asset <- read_csv("text/asset.csv",
+  col_types = cols(
+    asset = col_character(),
+    text = col_character()
+  )
+)
 
 options <- read_csv("data/options.csv",
   col_types = cols(
@@ -22,7 +36,8 @@ options <- read_csv("data/options.csv",
     value = col_double(),
     data_source = col_character(),
     Asset = col_character()
-  ))
+  )
+)
 
 validation <- read_csv("data/validation.csv",
   col_types = cols(
@@ -32,7 +47,8 @@ validation <- read_csv("data/validation.csv",
     value = col_double(),
     data_source = col_character(),
     Asset = col_character()
-  ))
+  )
+)
 
 ntiles <- bind_rows(options, validation)
 
@@ -55,7 +71,12 @@ ui <- fluidPage(
     
     column(12,
            
-           titlePanel("DYNASIM Asset Validation")
+           p("Long-run projections are sensitive to small changes in data and 
+              assumptions. Use this interactive tool to compare changes in 
+              DYNASIM's assumptions for defined-contribution pensions with data 
+             from the Health and Retirement Study, Panel Study of Income 
+             Dynamics, Survey of Consumer Finances, and Survey of Income and 
+             Program Participation. ")
     )
   ),
   
@@ -79,27 +100,27 @@ ui <- fluidPage(
            selectInput(inputId = "option",
                        label = "Option",
                        choices = c("Baseline" = "Baseline",
-                                   "Low Fees" = "Low Fees",
-                                   "Rebalance Every 5 Years" = "Rebalance Every 5 Years",
-                                   "Low Participation" = "Low Participation",
-                                   "High Participation" = "High Participation",
-                                   "Less Risk" = "Less Risk",
-                                   "More Risk" = "More Risk",
-                                   "No TDFs" = "No TDFs",
-                                   "No Auto-Enrollment" = "No Auto-Enrollment",
-                                   "No Cash Outs" = "No Cash Outs",
-                                   "All ROTH-401k Accounts A" = "All ROTH-401k Accounts A",
-                                   "All ROTH-401k Accounts B" = "All ROTH-401k Accounts B",
-                                   "Mandated Employer Plans (60%)" = "Mandated Employer Plans (60%)",
-                                   "Mandated Employer Plans (100%)" = "Mandated Employer Plans (100%)")
+                                   "Low fees" = "Low fees",
+                                   "Rebalance every 5 years" = "Rebalance every 5 years",
+                                   "Low participation" = "Low participation",
+                                   "High participation" = "High participation",
+                                   "Less risk" = "Less risk",
+                                   "More risk" = "More risk",
+                                   "No target date funds" = "No target date funds",
+                                   "No auto-enrollment" = "No auto-enrollment",
+                                   "No cash outs" = "No cash outs",
+                                   "All Roth-401k accounts #1" = "All Roth-401k accounts #1",
+                                   "All Roth-401k accounts #2" = "All Roth-401k accounts #2",
+                                   "Mandated employer plans (60%)" = "Mandated employer plans (60%)",
+                                   "Mandated employer plans (100%)" = "Mandated employer plans (100%)")
            ),
            
            selectInput(inputId = "asset",
                        label = "Asset",
-                       choices = c("Total Assets" = "Total Assets",
-                                   "Retirement Account Assets" = "Retirement Account Assets",
-                                   "Financial Assets" = "Financial Assets",
-                                   "Home Equity" = "Home Equity")
+                       choices = c("Total assets" = "Total assets",
+                                   "Retirement account assets" = "Retirement account assets",
+                                   "Financial assets" = "Financial assets",
+                                   "Home equity" = "Home equity")
            ),           
 
            selectInput(inputId = "percentile",
@@ -139,15 +160,18 @@ ui <- fluidPage(
     column(6,
            checkboxGroupInput(inputId = "data_source", 
                               label = "Validation Data",
-                              choices = c("HRS" = "HRS",
+                              choices = c("Baseline" = "Baseline",
+                                          "HRS" = "HRS",
                                           "PSID" = "PSID",
                                           "SCF" = "SCF",
                                           "SIPP" = "SIPP"), 
-                              selected = c("HRS", "PSID", "SCF", "SIPP"))
+                              selected = c("Baseline", "HRS", "PSID", "SCF", "SIPP"))
     )
   
   ),
 
+  br(),
+  
   fluidRow(
     column(12,
            downloadButton('download_data', 'Download Charted Data')
@@ -155,6 +179,38 @@ ui <- fluidPage(
   ),
   
   br(),
+  
+  fluidRow(
+    
+    column(12,
+           
+           # Explanation of Social Security Reform
+           
+           htmlOutput("text_option")
+    )
+  ),
+  
+  fluidRow(
+    
+    column(12,
+           
+           # Explanation of asset
+           
+           htmlOutput("text_asset")
+    )
+    
+  ),
+  
+  
+  fluidRow(
+    column(12,
+           
+      htmlOutput("blurb")     
+      
+    )
+  
+  ),
+  
   br(),
   br(),
   br(),
@@ -184,17 +240,34 @@ server <- function(input, output) {
   })
   
   output$subtitleb <- renderText({
-    str_c(input$asset, "/Average Earnings")
+    str_c(input$asset, "/average earnings")
   })
   
   data_subset <- reactive({
     ntiles %>%
-      filter(Percentile == input$percentile,
-             Asset == input$asset,
-             cohort == input$cohort,
-             data_source %in% c(input$option, "HRS", "PSID", "SCF", "SIPP")) %>%
+      filter(Percentile == input$percentile) %>%
+      filter(Asset == input$asset) %>%
+      filter(cohort == input$cohort) %>%
+      filter(data_source %in% c("Baseline", "HRS", "PSID", "SCF", "SIPP", input$option)) %>%
       mutate(value_subset = ifelse(data_source %in% c(input$data_source, input$option), value, NA),
-             data_source = factor(data_source, levels = unique(data_source)))
+             data_source = factor(data_source, levels = c("Baseline",
+                                                          "HRS",
+                                                          "PSID",
+                                                          "SCF",
+                                                          "SIPP",
+                                                          "Low fees",
+                                                          "Rebalance every 5 years",
+                                                          "Low participation",
+                                                          "High participation",
+                                                          "Less risk",
+                                                          "More risk",
+                                                          "No target date funds",
+                                                          "No auto-enrollment",
+                                                          "No cash outs",
+                                                          "All Roth-401k accounts #1",
+                                                          "All Roth-401k accounts #2",
+                                                          "Mandated employer plans (60%)",
+                                                          "Mandated employer plans (100%)")))
   })  
   
   output$chart <- renderPlot({  
@@ -214,7 +287,27 @@ server <- function(input, output) {
       write_csv(data_subset(), file)
     }
   )
+ 
+  output$text_option <- renderText({
+    
+    as.character(
+      option_text %>%
+        filter(option == input$option) %>%
+        select(text)
+    )
+    
+  })
+   
   
+  output$text_asset <- renderText({
+    
+    as.character(
+      option_asset %>%
+        filter(asset == input$asset) %>%
+        select(text)
+    )
+    
+  })
 }
 
 shinyApp(ui = ui, server = server)

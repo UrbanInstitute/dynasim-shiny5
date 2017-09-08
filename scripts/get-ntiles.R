@@ -2,10 +2,8 @@ library(readxl)
 library(stringr)
 library(tidyverse)
 
-
-
 #ntiles <- "NtileByCohort912OPT0aug18v2.xlsx"
-ntiles <- "X:\programs\run912\opt0\NtileByCohort912OPT0.xlsx"
+ntiles <- "X:/programs/run912/opt0/NtileByCohort912OPT0.xlsx"
 
 # SCF
 get_scf <- function(cell_range, asset) {
@@ -111,25 +109,25 @@ get_sipp <- function(cell_range, asset) {
 }
 
 # Run functions
-hrs1 <- get_hrs(cell_range = "A2973:L3855", asset = "Retirement Account Assets")
-hrs2 <- get_hrs(cell_range = "A2012:L2894", asset = "Financial Assets")
-hrs3 <- get_hrs(cell_range = "A90:L972", asset = "Total Assets")
-hrs4 <- get_hrs(cell_range = "A1051:L1933", asset = "Home Equity")
+hrs1 <- get_hrs(cell_range = "A2973:L3855", asset = "Retirement account assets")
+hrs2 <- get_hrs(cell_range = "A2012:L2894", asset = "Financial assets")
+hrs3 <- get_hrs(cell_range = "A90:L972", asset = "Total assets")
+hrs4 <- get_hrs(cell_range = "A1051:L1933", asset = "Home equity")
 
-psid1 <- get_psid(cell_range = "C7394:P8120", asset = "Retirement Account Assets")
-psid2 <- get_psid(cell_range = "C5806:P6532", asset = "Financial Assets")
-psid3 <- get_psid(cell_range = "C6600:P7326", asset = "Total Assets")
-psid4 <- get_psid(cell_range = "C8188:P8914", asset = "Home Equity")
+psid1 <- get_psid(cell_range = "C7394:P8120", asset = "Retirement account assets")
+psid2 <- get_psid(cell_range = "C5806:P6532", asset = "Financial assets")
+psid3 <- get_psid(cell_range = "C6600:P7326", asset = "Total assets")
+psid4 <- get_psid(cell_range = "C8188:P8914", asset = "Home equity")
 
-scf1 <- get_scf(cell_range = "C6850:Q7901", asset = "Retirement Account Assets")
-scf2 <- get_scf(cell_range = "C5706:Q6757", asset = "Financial Assets")
-scf3 <- get_scf(cell_range = "C3418:Q4469", asset = "Total Assets")
-scf4 <- get_scf(cell_range = "C4562:Q5613", asset = "Home Equity")
+scf1 <- get_scf(cell_range = "C6850:Q7901", asset = "Retirement account assets")
+scf2 <- get_scf(cell_range = "C5706:Q6757", asset = "Financial assets")
+scf3 <- get_scf(cell_range = "C3418:Q4469", asset = "Total assets")
+scf4 <- get_scf(cell_range = "C4562:Q5613", asset = "Home equity")
 
-sipp1 <- get_sipp(cell_range = "C7392:Q8118", asset = "Retirement Account Assets")
-sipp2 <- get_sipp(cell_range = "C5804:Q6530", asset = "Financial Assets")
-sipp3 <- get_sipp(cell_range = "C246:Q972", asset = "Total Assets")
-sipp4 <- get_sipp(cell_range = "C8186:Q8912", asset = "Home Equity")
+sipp1 <- get_sipp(cell_range = "C7392:Q8118", asset = "Retirement account assets")
+sipp2 <- get_sipp(cell_range = "C5804:Q6530", asset = "Financial assets")
+sipp3 <- get_sipp(cell_range = "C246:Q972", asset = "Total assets")
+sipp4 <- get_sipp(cell_range = "C8186:Q8912", asset = "Home equity")
 
 # Combine data
 ntiles_data <- bind_rows(hrs1, hrs2, hrs3, hrs4,
