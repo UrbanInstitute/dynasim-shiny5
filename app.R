@@ -35,7 +35,7 @@ factor_order <- c("Baseline", "HRS", "PSID", "SCF", "SIPP", "Reduce fees",
                   "No cash outs", "All Roth-401k accounts #1",
                   "All Roth-401k accounts #2",
                   "Mandated employer plans (60%)",
-                  "Mandated employer plans (100%)", "Repeat the 197s")
+                  "Mandated employer plans (100%)", "Repeat the 1970s")
 
 financial <- read_csv("data/financial-assets.csv",
   col_types = cols(
@@ -57,8 +57,6 @@ financial <- read_csv("data/financial-assets.csv",
     Mean = col_double()
   )
 ) %>% mutate(data_source = factor(data_source, levels = factor_order))
-
-
 
 home_equity <- read_csv("data/home-equity.csv", 
   col_types = cols(
@@ -208,10 +206,10 @@ ui <- fluidPage(
            
            selectInput(inputId = "asset",
                        label = "Asset",
-                       choices = c("Total assets" = "Total assets",
-                                   "Retirement account assets" = "Retirement account assets",
+                       choices = c("Retirement account assets" = "Retirement account assets",
                                    "Financial assets" = "Financial assets",
-                                   "Home equity" = "Home equity")
+                                   "Home equity" = "Home equity",
+                                   "Total assets" = "Total assets")
            ),           
 
            selectInput(inputId = "percentile",
@@ -382,7 +380,10 @@ server <- function(input, output) {
   output$download_data <- downloadHandler(
     filename = function() { paste0(input$option, '.csv') },
     content = function(file) {
-      write_csv(data_subset(), file)
+      
+      data_subset() %>%
+        filter(!is.na(value_subset)) %>%
+        write_csv(file)
     }
   )
  

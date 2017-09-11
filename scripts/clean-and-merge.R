@@ -45,6 +45,10 @@ ntiles <- ntiles %>%
          `95th percentile` = `95`,
          `98th percentile` = `98`)
 
+# Drop unnecessary levels
+ntiles <- ntiles %>%
+  filter(!cohort %in% c("low-1920", "low-1925", "1976+", "1981+", "1976-1980", "1976-1985"))
+
 # break ntiles down by asset asset
 ntiles %>%
   filter(Asset == "Financial assets") %>%
