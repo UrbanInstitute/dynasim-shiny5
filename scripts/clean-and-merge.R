@@ -4,9 +4,7 @@ library(tidyverse)
 options(scipen = 999)
 
 # Load Data
-options <- read_csv("data/options.csv")
-
-,
+options <- read_csv("data/options.csv",
                     col_types = cols(
                       Percentile = col_character(),
                       Age = col_integer(),
@@ -35,17 +33,17 @@ rm(options, validation)
 ntiles <- ntiles %>%
   spread(Percentile, value) %>%
   rename(`5th percentile` = `5`,
-         `10th Percentile` = `10`,
-         `20th Percentile` = `20`,
-         `30th Percentile` = `30`,
-         `40th Percentile` = `40`,
-         `50th Percentile` = `50`,
-         `60th Percentile` = `60`,
-         `70th Percentile` = `70`,
-         `80th Percentile` = `80`,
-         `90th Percentile` = `90`,
-         `95th Percentile` = `95`,
-         `98th Percentile` = `98`)
+         `10th percentile` = `10`,
+         `20th percentile` = `20`,
+         `30th percentile` = `30`,
+         `40th percentile` = `40`,
+         `50th percentile` = `50`,
+         `60th percentile` = `60`,
+         `70th percentile` = `70`,
+         `80th percentile` = `80`,
+         `90th percentile` = `90`,
+         `95th percentile` = `95`,
+         `98th percentile` = `98`)
 
 # break ntiles down by asset asset
 ntiles %>%
