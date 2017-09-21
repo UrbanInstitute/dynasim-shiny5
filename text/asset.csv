@@ -1,5 +1,5 @@
 asset,text
-Total assets,<h4>Total assets</h4><p></p>
-Retirement account assets,<h4>Retirement account assets</h4><p></p>
-Financial assets,<h4>Financial assets</h4><p></p>
-Home equity,<h4>Home equity</h4><p></p>
+Total assets,"<h4>Total assets</h4><p>Includes savings accounts, checking accounts, money market accounts, certificates of deposit, stock, bonds, farm and business equity, and vehicle equity minus unsecured debt. Retirement account assets includes IRAs, Keogh plans, employer defined-contribution plans, and Roth plans.</p>"
+Retirement account assets,"<h4>Retirement account assets</h4><p>Includes IRAs, Keogh plans, employer defined-contribution plans, and Roth plans.</p>"
+Financial assets,"<h4>Financial assets</h4><p>Includes savings accounts, checking accounts, money market accounts, certificates of deposit, stock, bonds, farm and business equity, and vehicle equity minus unsecured debt.</p>"
+Home equity,<h4>Home equity</h4><p>Home value less mortgage debt. DYNASIM holds real home equity constant after age 70 for individuals who continue to own their homes.</p>

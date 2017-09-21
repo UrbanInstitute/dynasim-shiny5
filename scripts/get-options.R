@@ -2,15 +2,14 @@ library(readxl)
 library(stringr)
 library(tidyverse)
 
-"NtileByCohort912OPT0aug18v2.xlsx"
-
 # Load file paths
 filepaths <- read_csv("options-guide.csv",
   col_types = cols(
     option = col_character(),
     option_name = col_character(),
     filepath = col_character()
-  ))
+  )
+)
 
 
 get_option <- function(link, cell_range, asset, option_name) {
@@ -53,7 +52,7 @@ iterate_option <- function(link, option_name) {
   return(ntiles_data)
 }  
 
-ntiles_data <- map2(filepaths$filepath[1:14], filepaths$option_name[1:14], iterate_option) %>%
+ntiles_data <- map2(filepaths$filepath, filepaths$option_name, iterate_option) %>%
   reduce(bind_rows)
 
 write_csv(ntiles_data, "data/options.csv")

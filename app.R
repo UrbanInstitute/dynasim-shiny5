@@ -1,9 +1,10 @@
-## Libraries and Source Files
+# Libraries and Source Files
 library(shiny)
 library(tidyverse)
-library(stringr)
 library(scales)
 
+# Set options
+options(shiny.sanitize.errors = TRUE)
 options(scipen = 999)
 
 # Source file for Windows
@@ -28,31 +29,162 @@ option_asset <- read_csv("text/asset.csv",
   )
 )
 
-options <- read_csv("data/options.csv",
+factor_order <- c("Baseline", "HRS", "PSID", "SCF", "SIPP", "Reduce fees",
+                  "Rebalance every 5 years", "Low participation",
+                  "High participation", "Less risk","More risk",
+                  "No target-date funds", "No auto-enrollment",
+                  "No cash outs", "All Roth-401(K) accounts #1",
+                  "All Roth-401(K) accounts #2",
+                  "Mandated employer plans (60%)",
+                  "Mandated employer plans (100%)", "Repeat the 1970s",
+                  "RothIRA2", "RothIRA2allpart", "RothIRA2b", "RothIRA2c", 
+                  "RothIRA2d", "RothIRA2e", "RothIRA2f", "RothIRA2g", 
+                  "RothIRA2nocashout", "RothIRA3", "RothIRA3b", "RothIRA3c", 
+                  "RothIRA3d", "RothIRA4", "RothIRA4b", "RothIRA4c", 
+                  "RothIRA4d","RothIRAHighLimits", "RothIRALimit2", 
+                  "RothIRALimit2b", "RothIRALimit2c", "RothIRALimit2d", 
+                  "RothIRALimit2e", "RothIRALimit3", "RothIRALimit3b", 
+                  "RothIRALimit4", "SAVEopt2", "SaveOpt2b", "SaveOpt2firm10", 
+                  "SaveOpt3", "SAVEopt3b", "SAVEopt4", "SAVEopt4b", "BPC package")
+
+financial <- read_csv("data/financial-assets.csv",
   col_types = cols(
-    Percentile = col_character(),
     Age = col_integer(),
     cohort = col_character(),
-    value = col_double(),
     data_source = col_character(),
-    Asset = col_character()
+    `10th percentile` = col_double(),
+    `20th percentile` = col_double(),
+    `30th percentile` = col_double(),
+    `40th percentile` = col_double(),
+    `5th percentile` = col_double(),
+    `50th percentile` = col_double(),
+    `60th percentile` = col_double(),
+    `70th percentile` = col_double(),
+    `80th percentile` = col_double(),
+    `90th percentile` = col_double(),
+    `95th percentile` = col_double(),
+    `98th percentile` = col_double(),
+    Mean = col_double()
   )
-)
+) %>% mutate(data_source = factor(data_source, levels = factor_order))
 
-validation <- read_csv("data/validation.csv",
+home_equity <- read_csv("data/home-equity.csv", 
   col_types = cols(
     Age = col_integer(),
-    Percentile = col_character(),
     cohort = col_character(),
-    value = col_double(),
     data_source = col_character(),
-    Asset = col_character()
+    `10th percentile` = col_double(),
+    `20th percentile` = col_double(),
+    `30th percentile` = col_double(),
+    `40th percentile` = col_double(),
+    `5th percentile` = col_double(),
+    `50th percentile` = col_double(),
+    `60th percentile` = col_double(),
+    `70th percentile` = col_double(),
+    `80th percentile` = col_double(),
+    `90th percentile` = col_double(),
+    `95th percentile` = col_double(),
+    `98th percentile` = col_double(),
+    Mean = col_double()
   )
-)
+) %>% mutate(data_source = factor(data_source, levels = factor_order))
 
-ntiles <- bind_rows(options, validation)
+retirement_account <- read_csv("data/retirement-account-assets.csv", col_types = 
+  cols(
+    Age = col_integer(),
+    cohort = col_character(),
+    data_source = col_character(),
+    `10th percentile` = col_integer(),
+    `20th percentile` = col_double(),
+    `30th percentile` = col_double(),
+    `40th percentile` = col_double(),
+    `5th percentile` = col_integer(),
+    `50th percentile` = col_double(),
+    `60th percentile` = col_double(),
+    `70th percentile` = col_double(),
+    `80th percentile` = col_double(),
+    `90th percentile` = col_double(),
+    `95th percentile` = col_double(),
+    `98th percentile` = col_double(),
+    Mean = col_double()
+  )
+) %>% mutate(data_source = factor(data_source, levels = factor_order))
 
-rm(options, validation)
+total <- read_csv("data/total-assets.csv",
+  col_types = cols(
+    Age = col_integer(),
+    cohort = col_character(),
+    data_source = col_character(),
+    `10th percentile` = col_double(),
+    `20th percentile` = col_double(),
+    `30th percentile` = col_double(),
+    `40th percentile` = col_double(),
+    `5th percentile` = col_double(),
+    `50th percentile` = col_double(),
+    `60th percentile` = col_double(),
+    `70th percentile` = col_double(),
+    `80th percentile` = col_double(),
+    `90th percentile` = col_double(),
+    `95th percentile` = col_double(),
+    `98th percentile` = col_double(),
+    Mean = col_double()
+  )
+) %>% mutate(data_source = factor(data_source, levels = factor_order))
+
+# Set colors so colors don't change as levels are added/drops
+cols <- c("Baseline" = "#1696d2",
+          "HRS" = "#fdbf11",
+          "PSID" = "#000000",
+          "SCF" = "#ec008b",              
+          "SIPP" = "#d2d2d2",
+          "Reduce fees" = "#55B748",
+          "Rebalance every 5 years" = "#55B748",
+          "Low participation" = "#55B748",
+          "High participation" = "#55B748",
+          "Less risk" = "#55B748",
+          "More risk" = "#55B748",
+          "No target-date funds" = "#55B748",
+          "No auto-enrollment" = "#55B748",
+          "No cash outs" = "#55B748",
+          "All Roth-401(K) accounts #1" = "#55B748",
+          "All Roth-401(K) accounts #2" = "#55B748",
+#          "Mandated employer plans (60%)" = "#55B748", 
+#          "Mandated employer plans (100%)" = "#55B748",
+          "Repeat the 1970s" = "#55B748",
+          "RothIRA2" = "#55B748",
+          "RothIRA2allpart" = "#55B748",
+          "RothIRA2b" = "#55B748",
+          "RothIRA2c" = "#55B748",
+          "RothIRA2d" = "#55B748",
+          "RothIRA2e" = "#55B748",
+          "RothIRA2f" = "#55B748",
+          "RothIRA2g" = "#55B748",
+          "RothIRA2nocashout" = "#55B748",
+          "RothIRA3" = "#55B748",
+          "RothIRA3b" = "#55B748",
+          "RothIRA3c" = "#55B748",
+          "RothIRA3d" = "#55B748",
+          "RothIRA4" = "#55B748",
+          "RothIRA4b" = "#55B748",
+          "RothIRA4c" = "#55B748",
+          "RothIRA4d" = "#55B748",
+          "RothIRAHighLimits" = "#55B748",
+          "RothIRALimit2" = "#55B748",
+          "RothIRALimit2b" = "#55B748", 
+          "RothIRALimit2c" = "#55B748",
+          "RothIRALimit2d" = "#55B748",
+          "RothIRALimit2e" = "#55B748",
+          "RothIRALimit3" = "#55B748",
+          "RothIRALimit3b" = "#55B748",
+          "RothIRALimit4" = "#55B748",
+          "SAVEopt2" = "#55B748",
+          "SaveOpt2b" = "#55B748",
+          "SaveOpt2firm10" = "#55B748",
+          "SaveOpt3" = "#55B748",
+          "SAVEopt3b" = "#55B748",
+          "SAVEopt4" = "#55B748",
+          "SAVEopt4b" = "#55B748",
+          "BPC package" = "#55B748")
 
 ##
 ## Shiny
@@ -100,44 +232,79 @@ ui <- fluidPage(
            selectInput(inputId = "option",
                        label = "Option",
                        choices = c("Baseline" = "Baseline",
-                                   "Low fees" = "Low fees",
+                                   "Reduce fees" = "Reduce fees",
                                    "Rebalance every 5 years" = "Rebalance every 5 years",
                                    "Low participation" = "Low participation",
                                    "High participation" = "High participation",
                                    "Less risk" = "Less risk",
                                    "More risk" = "More risk",
-                                   "No target date funds" = "No target date funds",
+                                   "No target-date funds" = "No target-date funds",
                                    "No auto-enrollment" = "No auto-enrollment",
                                    "No cash outs" = "No cash outs",
-                                   "All Roth-401k accounts #1" = "All Roth-401k accounts #1",
-                                   "All Roth-401k accounts #2" = "All Roth-401k accounts #2",
-                                   "Mandated employer plans (60%)" = "Mandated employer plans (60%)",
-                                   "Mandated employer plans (100%)" = "Mandated employer plans (100%)")
+                                   "All Roth-401(K) accounts #1" = "All Roth-401(K) accounts #1",
+                                   "All Roth-401(K) accounts #2" = "All Roth-401(K) accounts #2",
+#                                   "Mandated employer plans (60%)" = "Mandated employer plans (60%)",
+#                                   "Mandated employer plans (100%)" = "Mandated employer plans (100%)",
+                                   "Repeat the 1970s" = "Repeat the 1970s",
+                                   "BPC package" = "BPC package",
+                                   "RothIRA2" = "RothIRA2",
+                                   "RothIRA2allpart" = "RothIRA2allpart",
+                                   "RothIRA2b" = "RothIRA2b",
+                                   "RothIRA2c" = "RothIRA2c",
+                                   "RothIRA2d" = "RothIRA2d",
+                                   "RothIRA2e" = "RothIRA2e",
+                                   "RothIRA2f" = "RothIRA2f",
+                                   "RothIRA2g" = "RothIRA2g",
+                                   "RothIRA2nocashout" = "RothIRA2nocashout",
+                                   "RothIRA3" = "RothIRA3",
+                                   "RothIRA3b" = "RothIRA3b",
+                                   "RothIRA3c" = "RothIRA3c",
+                                   "RothIRA3d" = "RothIRA3d",
+                                   "RothIRA4" = "RothIRA4",
+                                   "RothIRA4b" = "RothIRA4b",
+                                   "RothIRA4c" = "RothIRA4c",
+                                   "RothIRA4d" = "RothIRA4d",
+                                   "RothIRAHighLimits" = "RothIRAHighLimits",
+                                   "RothIRALimit2" = "RothIRALimit2",
+                                   "RothIRALimit2b" = "RothIRALimit2b",
+                                   "RothIRALimit2c" = "RothIRALimit2c",
+                                   "RothIRALimit2d" = "RothIRALimit2d",
+                                   "RothIRALimit2e" = "RothIRALimit2e",
+                                   "RothIRALimit3" = "RothIRALimit3",
+                                   "RothIRALimit3b" = "RothIRALimit3b",
+                                   "RothIRALimit4" = "RothIRALimit4",
+                                   "SAVEopt2" = "SAVEopt2",
+                                   "SaveOpt2b" = "SaveOpt2b",
+                                   "SaveOpt2firm10" = "SaveOpt2firm10",
+                                   "SaveOpt3" = "SaveOpt3",
+                                   "SAVEopt3b" = "SAVEopt3b",
+                                   "SAVEopt4" = "SAVEopt4",
+                                   "SAVEopt4b" = "SAVEopt4b")
            ),
            
            selectInput(inputId = "asset",
                        label = "Asset",
-                       choices = c("Total assets" = "Total assets",
-                                   "Retirement account assets" = "Retirement account assets",
+                       choices = c("Retirement account assets" = "Retirement account assets",
                                    "Financial assets" = "Financial assets",
-                                   "Home equity" = "Home equity")
+                                   "Home equity" = "Home equity",
+                                   "Total assets" = "Total assets")
            ),           
 
            selectInput(inputId = "percentile",
                        label = "Percentile or Mean",
                        choices = c("Mean" = "Mean",
-                                   "5th Percentile" = "5",
-                                   "10th Percentile" = "10",
-                                   "20th Percentile" = "20",
-                                   "30th Percentile" = "30",
-                                   "40th Percentile" = "40",
-                                   "50th Percentile" = "50",
-                                   "60th Percentile" = "60",
-                                   "70th Percentile" = "70",
-                                   "80th Percentile" = "80",
-                                   "90th Percentile" = "90",
-                                   "95th Percentile" = "95",
-                                   "98th Percentile" = "98")
+                                   "5th percentile" = "`5th percentile`",
+                                   "10th percentile" = "`10th percentile`",
+                                   "20th percentile" = "`20th percentile`",
+                                   "30th percentile" = "`30th percentile`",
+                                   "40th percentile" = "`40th percentile`",
+                                   "50th percentile" = "`50th percentile`",
+                                   "60th percentile" = "`60th percentile`",
+                                   "70th percentile" = "`70th percentile`",
+                                   "80th percentile" = "`80th percentile`",
+                                   "90th percentile" = "`90th percentile`",
+                                   "95th percentile" = "`95th percentile`",
+                                   "98th percentile" = "`98th percentile`")
            ),         
            
            selectInput(inputId = "cohort",
@@ -174,7 +341,7 @@ ui <- fluidPage(
   
   fluidRow(
     column(12,
-           downloadButton('download_data', 'Download Charted Data')
+           downloadButton('download_data', 'Download charted data')
     )
   ),
   
@@ -205,20 +372,34 @@ ui <- fluidPage(
   fluidRow(
     column(12,
            
-      htmlOutput("blurb")     
+      HTML("<h4><a href='http://hrsonline.isr.umich.edu/'>Health and Retirement 
+           Study:</a></h4><p>A national longitudinal study of approximately 
+           20,000 respondents age 50 and older that asks questions about 
+           assets, health care, housing, and pensions. The study is conducted 
+           every two years and began in 1992.</p>"),
+      HTML("<h4><a href='https://psidonline.isr.umich.edu/'>Panel Study of 
+           Income Dynamics:</a></h4><p>A national longitudinal study of more 
+           than 18,000 individuals in 5,000 families that asks questions about 
+           employment, income, wealth, expenditures, health, marriage, 
+           childbearing, child development, philanthropy, and education. 
+           Families were asked questions annually from 1968 to 1997 and every 
+           other year after 1997.</p> "),
+      HTML("<h4><a href='https://www.federalreserve.gov/econres/scfindex.htm'>Survey of Consumer Finances:</a></h4>
+           <p>A national cross-sectional study of approximately 6,500 families 
+           that focuses on balance sheets, pensions, income, and demographic 
+           characteristics. The survey is conducted every three years and began 
+           in 1983.</p> "),
+      HTML("<h4><a href='https://www.census.gov/sipp/'>Survey of Income and 
+           Program Participation:</a></h4><p>A continuous series of national 
+           panels of 14,000 to 52,000 households that focuses on the interaction 
+           between tax, transfer, and other government and private policies. 
+           The survey began in 1983 and includes monthly data.</p>")
       
     )
   
   ),
   
   br(),
-  br(),
-  br(),
-  br(),
-  br(),
-  br(),
-  br(),
-  br(),  
   
   tags$script(src = "activatePym.js")
 )
@@ -228,46 +409,42 @@ server <- function(input, output) {
   options(shiny.sanitize.errors = FALSE)
   
   output$title <- renderText({
-    
-    str_c(input$Percentile, input$asset, sep = " ")
-    
+    paste(input$Percentile, input$asset, sep = " ")
   })
   
   output$subtitlea <- renderText({
-    
-    str_c(input$cohort, " Cohorts", sep = " ")
-    
+    paste(input$cohort, " Cohorts", sep = " ")
   })
   
   output$subtitleb <- renderText({
-    str_c(input$asset, "/average earnings")
+    paste(input$asset, "(divided by average earnings)")
   })
+ 
   
-  data_subset <- reactive({
-    ntiles %>%
-      filter(Percentile == input$percentile) %>%
-      filter(Asset == input$asset) %>%
+   
+  filter_df <- function(df) {
+    
+    print(input$option)
+    
+    df %>%
       filter(cohort == input$cohort) %>%
       filter(data_source %in% c("Baseline", "HRS", "PSID", "SCF", "SIPP", input$option)) %>%
-      mutate(value_subset = ifelse(data_source %in% c(input$data_source, input$option), value, NA),
-             data_source = factor(data_source, levels = c("Baseline",
-                                                          "HRS",
-                                                          "PSID",
-                                                          "SCF",
-                                                          "SIPP",
-                                                          "Low fees",
-                                                          "Rebalance every 5 years",
-                                                          "Low participation",
-                                                          "High participation",
-                                                          "Less risk",
-                                                          "More risk",
-                                                          "No target date funds",
-                                                          "No auto-enrollment",
-                                                          "No cash outs",
-                                                          "All Roth-401k accounts #1",
-                                                          "All Roth-401k accounts #2",
-                                                          "Mandated employer plans (60%)",
-                                                          "Mandated employer plans (100%)")))
+      select_("Age", "cohort", "data_source", value_subset = input$percentile) %>%
+      mutate(value_subset = if_else(data_source %in% c(input$data_source, input$option), as.numeric(value_subset), as.numeric(NA)))
+  } 
+    
+  data_subset <- reactive({
+    
+    if (input$asset == "Total assets") {
+      filter_df(total)
+    } else if (input$asset == "Retirement account assets") {
+      filter_df(retirement_account)      
+    } else if (input$asset == "Financial assets") {
+      filter_df(financial)      
+    } else if (input$asset == "Home equity") {
+      filter_df(home_equity)      
+    }
+    
   })  
   
   output$chart <- renderPlot({  
@@ -276,7 +453,10 @@ server <- function(input, output) {
       ggplot(aes(x = Age, y = value_subset, color = data_source)) +
       geom_line(size = 1) +
         scale_x_continuous(breaks = c(20, 30, 40, 50, 60, 70, 80, 90, 100)) +
-        labs(y = NULL) + 
+        labs(y = NULL,
+             caption = "DYNASIM3
+                          Urban Institute") + 
+        scale_color_manual(values = cols) +
         theme(axis.line = element_blank()) 
       
   })  
@@ -284,7 +464,10 @@ server <- function(input, output) {
   output$download_data <- downloadHandler(
     filename = function() { paste0(input$option, '.csv') },
     content = function(file) {
-      write_csv(data_subset(), file)
+      
+      data_subset() %>%
+        filter(!is.na(value_subset)) %>%
+        write_csv(file)
     }
   )
  
