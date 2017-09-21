@@ -1,8 +1,10 @@
-## Libraries and Source Files
+# Libraries and Source Files
 library(shiny)
 library(tidyverse)
 library(scales)
 
+# Set options
+options(shiny.sanitize.errors = TRUE)
 options(scipen = 999)
 
 # Source file for Windows
@@ -27,15 +29,23 @@ option_asset <- read_csv("text/asset.csv",
   )
 )
 
-
 factor_order <- c("Baseline", "HRS", "PSID", "SCF", "SIPP", "Reduce fees",
                   "Rebalance every 5 years", "Low participation",
                   "High participation", "Less risk","More risk",
-                  "No target date funds", "No auto-enrollment",
-                  "No cash outs", "All Roth-401k accounts #1",
-                  "All Roth-401k accounts #2",
+                  "No target-date funds", "No auto-enrollment",
+                  "No cash outs", "All Roth-401(K) accounts #1",
+                  "All Roth-401(K) accounts #2",
                   "Mandated employer plans (60%)",
-                  "Mandated employer plans (100%)", "Repeat the 1970s")
+                  "Mandated employer plans (100%)", "Repeat the 1970s",
+                  "RothIRA2", "RothIRA2allpart", "RothIRA2b", "RothIRA2c", 
+                  "RothIRA2d", "RothIRA2e", "RothIRA2f", "RothIRA2g", 
+                  "RothIRA2nocashout", "RothIRA3", "RothIRA3b", "RothIRA3c", 
+                  "RothIRA3d", "RothIRA4", "RothIRA4b", "RothIRA4c", 
+                  "RothIRA4d","RothIRAHighLimits", "RothIRALimit2", 
+                  "RothIRALimit2b", "RothIRALimit2c", "RothIRALimit2d", 
+                  "RothIRALimit2e", "RothIRALimit3", "RothIRALimit3b", 
+                  "RothIRALimit4", "SAVEopt2", "SaveOpt2b", "SaveOpt2firm10", 
+                  "SaveOpt3", "SAVEopt3b", "SAVEopt4", "SAVEopt4b", "BPC package")
 
 financial <- read_csv("data/financial-assets.csv",
   col_types = cols(
@@ -133,14 +143,48 @@ cols <- c("Baseline" = "#1696d2",
           "High participation" = "#55B748",
           "Less risk" = "#55B748",
           "More risk" = "#55B748",
-          "No target date funds" = "#55B748",
+          "No target-date funds" = "#55B748",
           "No auto-enrollment" = "#55B748",
           "No cash outs" = "#55B748",
-          "All Roth-401k accounts #1" = "#55B748",
-          "All Roth-401k accounts #2" = "#55B748",
-          "Mandated employer plans (60%)" = "#55B748", 
-          "Mandated employer plans (100%)" = "#55B748",
-          "Repeat the 1970s" = "#55B748")
+          "All Roth-401(K) accounts #1" = "#55B748",
+          "All Roth-401(K) accounts #2" = "#55B748",
+#          "Mandated employer plans (60%)" = "#55B748", 
+#          "Mandated employer plans (100%)" = "#55B748",
+          "Repeat the 1970s" = "#55B748",
+          "RothIRA2" = "#55B748",
+          "RothIRA2allpart" = "#55B748",
+          "RothIRA2b" = "#55B748",
+          "RothIRA2c" = "#55B748",
+          "RothIRA2d" = "#55B748",
+          "RothIRA2e" = "#55B748",
+          "RothIRA2f" = "#55B748",
+          "RothIRA2g" = "#55B748",
+          "RothIRA2nocashout" = "#55B748",
+          "RothIRA3" = "#55B748",
+          "RothIRA3b" = "#55B748",
+          "RothIRA3c" = "#55B748",
+          "RothIRA3d" = "#55B748",
+          "RothIRA4" = "#55B748",
+          "RothIRA4b" = "#55B748",
+          "RothIRA4c" = "#55B748",
+          "RothIRA4d" = "#55B748",
+          "RothIRAHighLimits" = "#55B748",
+          "RothIRALimit2" = "#55B748",
+          "RothIRALimit2b" = "#55B748", 
+          "RothIRALimit2c" = "#55B748",
+          "RothIRALimit2d" = "#55B748",
+          "RothIRALimit2e" = "#55B748",
+          "RothIRALimit3" = "#55B748",
+          "RothIRALimit3b" = "#55B748",
+          "RothIRALimit4" = "#55B748",
+          "SAVEopt2" = "#55B748",
+          "SaveOpt2b" = "#55B748",
+          "SaveOpt2firm10" = "#55B748",
+          "SaveOpt3" = "#55B748",
+          "SAVEopt3b" = "#55B748",
+          "SAVEopt4" = "#55B748",
+          "SAVEopt4b" = "#55B748",
+          "BPC package" = "#55B748")
 
 ##
 ## Shiny
@@ -194,14 +238,48 @@ ui <- fluidPage(
                                    "High participation" = "High participation",
                                    "Less risk" = "Less risk",
                                    "More risk" = "More risk",
-                                   "No target date funds" = "No target date funds",
+                                   "No target-date funds" = "No target-date funds",
                                    "No auto-enrollment" = "No auto-enrollment",
                                    "No cash outs" = "No cash outs",
-                                   "All Roth-401k accounts #1" = "All Roth-401k accounts #1",
-                                   "All Roth-401k accounts #2" = "All Roth-401k accounts #2",
-                                   "Mandated employer plans (60%)" = "Mandated employer plans (60%)",
-                                   "Mandated employer plans (100%)" = "Mandated employer plans (100%)",
-                                   "Repeat the 1970s" = "Repeat the 1970s")
+                                   "All Roth-401(K) accounts #1" = "All Roth-401(K) accounts #1",
+                                   "All Roth-401(K) accounts #2" = "All Roth-401(K) accounts #2",
+#                                   "Mandated employer plans (60%)" = "Mandated employer plans (60%)",
+#                                   "Mandated employer plans (100%)" = "Mandated employer plans (100%)",
+                                   "Repeat the 1970s" = "Repeat the 1970s",
+                                   "BPC package" = "BPC package",
+                                   "RothIRA2" = "RothIRA2",
+                                   "RothIRA2allpart" = "RothIRA2allpart",
+                                   "RothIRA2b" = "RothIRA2b",
+                                   "RothIRA2c" = "RothIRA2c",
+                                   "RothIRA2d" = "RothIRA2d",
+                                   "RothIRA2e" = "RothIRA2e",
+                                   "RothIRA2f" = "RothIRA2f",
+                                   "RothIRA2g" = "RothIRA2g",
+                                   "RothIRA2nocashout" = "RothIRA2nocashout",
+                                   "RothIRA3" = "RothIRA3",
+                                   "RothIRA3b" = "RothIRA3b",
+                                   "RothIRA3c" = "RothIRA3c",
+                                   "RothIRA3d" = "RothIRA3d",
+                                   "RothIRA4" = "RothIRA4",
+                                   "RothIRA4b" = "RothIRA4b",
+                                   "RothIRA4c" = "RothIRA4c",
+                                   "RothIRA4d" = "RothIRA4d",
+                                   "RothIRAHighLimits" = "RothIRAHighLimits",
+                                   "RothIRALimit2" = "RothIRALimit2",
+                                   "RothIRALimit2b" = "RothIRALimit2b",
+                                   "RothIRALimit2c" = "RothIRALimit2c",
+                                   "RothIRALimit2d" = "RothIRALimit2d",
+                                   "RothIRALimit2e" = "RothIRALimit2e",
+                                   "RothIRALimit3" = "RothIRALimit3",
+                                   "RothIRALimit3b" = "RothIRALimit3b",
+                                   "RothIRALimit4" = "RothIRALimit4",
+                                   "SAVEopt2" = "SAVEopt2",
+                                   "SaveOpt2b" = "SaveOpt2b",
+                                   "SaveOpt2firm10" = "SaveOpt2firm10",
+                                   "SaveOpt3" = "SaveOpt3",
+                                   "SAVEopt3b" = "SAVEopt3b",
+                                   "SAVEopt4" = "SAVEopt4",
+                                   "SAVEopt4b" = "SAVEopt4b")
            ),
            
            selectInput(inputId = "asset",
@@ -296,7 +374,7 @@ ui <- fluidPage(
            
       HTML("<h4><a href='http://hrsonline.isr.umich.edu/'>Health and Retirement 
            Study:</a></h4><p>A national longitudinal study of approximately 
-           20,000 respondents ages fifty and older that asks questions about 
+           20,000 respondents age 50 and older that asks questions about 
            assets, health care, housing, and pensions. The study is conducted 
            every two years and began in 1992.</p>"),
       HTML("<h4><a href='https://psidonline.isr.umich.edu/'>Panel Study of 
@@ -309,8 +387,8 @@ ui <- fluidPage(
       HTML("<h4><a href='https://www.federalreserve.gov/econres/scfindex.htm'>Survey of Consumer Finances:</a></h4>
            <p>A national cross-sectional study of approximately 6,500 families 
            that focuses on balance sheets, pensions, income, and demographic 
-           characteristics. The survey is conducted every three years and dates 
-           back to 1983.</p> "),
+           characteristics. The survey is conducted every three years and began 
+           in 1983.</p> "),
       HTML("<h4><a href='https://www.census.gov/sipp/'>Survey of Income and 
            Program Participation:</a></h4><p>A continuous series of national 
            panels of 14,000 to 52,000 households that focuses on the interaction 
@@ -341,8 +419,12 @@ server <- function(input, output) {
   output$subtitleb <- renderText({
     paste(input$asset, "/average earnings")
   })
+ 
   
+   
   filter_df <- function(df) {
+    
+    print(input$option)
     
     df %>%
       filter(cohort == input$cohort) %>%
