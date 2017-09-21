@@ -417,7 +417,7 @@ server <- function(input, output) {
   })
   
   output$subtitleb <- renderText({
-    paste(input$asset, "/average earnings")
+    paste(input$asset, "(divided by average earnings)")
   })
  
   
@@ -453,7 +453,9 @@ server <- function(input, output) {
       ggplot(aes(x = Age, y = value_subset, color = data_source)) +
       geom_line(size = 1) +
         scale_x_continuous(breaks = c(20, 30, 40, 50, 60, 70, 80, 90, 100)) +
-        labs(y = NULL) + 
+        labs(y = NULL,
+             caption = "DYNASIM3
+                          Urban Institute") + 
         scale_color_manual(values = cols) +
         theme(axis.line = element_blank()) 
       
