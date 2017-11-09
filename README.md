@@ -1,6 +1,8 @@
 # dynasim-shiny5
 
-Interactive visualizations of DYNASIM projections of retirement account assets, financial assets, home equity, and total assets across different ages under a baseline and a range of alternative simulations. The interactive includes HRS, PSID, SCF, and SIPP data for validation. 
+Interactive visualizations of DYNASIM projections of retirement account assets, financial assets, home equity, and total assets across different ages under a baseline and a range of alternative simulations. The interactive includes HRS, PSID, SCF, and SIPP data for validation. [Link!](https://www.urban.org/policy-centers/cross-center-initiatives/program-retirement-policy/projects/dynasim-visualizing-older-americans-future-well-being/validating-dynasim)
+
+![](www/shiny5.png)
 
 ## data
 
@@ -37,3 +39,7 @@ The R Shiny graphic is built using the [Urban Institute R theme](https://github.
 ## Authors
 * Aaron Williams
 * Karen Smith
+* Ben Chartoff
+* Jerry Ta
+* Michael Marazzi
+* Dave D'Orio

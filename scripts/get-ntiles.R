@@ -26,7 +26,8 @@ get_scf <- function(cell_range, asset) {
 
   scf <- gather(scf, key = "cohort", value = "value", -Age, -Percentile) %>%
     mutate(data_source = "SCF", 
-           Asset = asset)
+           Asset = asset,
+           value = as.numeric(value))
   
   return(scf)
 }
