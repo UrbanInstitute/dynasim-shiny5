@@ -34,9 +34,7 @@ factor_order <- c("Baseline", "HRS", "PSID", "SCF", "SIPP", "Reduce fees",
                   "High participation", "Less risk","More risk",
                   "No target-date funds", "No auto-enrollment",
                   "No cash outs", "All Roth-401(K) accounts #1",
-                  "All Roth-401(K) accounts #2",
-                  "Mandated employer plans (60%)",
-                  "Mandated employer plans (100%)", "Repeat the 1970s",
+                  "All Roth-401(K) accounts #2", "Repeat the 1970s",
                   "RothIRA2", "RothIRA2allpart", "RothIRA2b", "RothIRA2c", 
                   "RothIRA2d", "RothIRA2e", "RothIRA2f", "RothIRA2g", 
                   "RothIRA2nocashout", "RothIRA3", "RothIRA3b", "RothIRA3c", 
@@ -45,7 +43,8 @@ factor_order <- c("Baseline", "HRS", "PSID", "SCF", "SIPP", "Reduce fees",
                   "RothIRALimit2b", "RothIRALimit2c", "RothIRALimit2d", 
                   "RothIRALimit2e", "RothIRALimit3", "RothIRALimit3b", 
                   "RothIRALimit4", "SAVEopt2", "SaveOpt2b", "SaveOpt2firm10", 
-                  "SaveOpt3", "SAVEopt3b", "SAVEopt4", "SAVEopt4b", "BPC package")
+                  "SaveOpt3", "SAVEopt3b", "SAVEopt4", "SAVEopt4b", 
+                  "Bipartisan Policy Center package")
 
 financial <- read_csv("data/financial-assets.csv",
   col_types = cols(
@@ -146,10 +145,6 @@ cols <- c("Baseline" = "#1696d2",
           "No target-date funds" = "#55B748",
           "No auto-enrollment" = "#55B748",
           "No cash outs" = "#55B748",
-          "All Roth-401(K) accounts #1" = "#55B748",
-          "All Roth-401(K) accounts #2" = "#55B748",
-#          "Mandated employer plans (60%)" = "#55B748", 
-#          "Mandated employer plans (100%)" = "#55B748",
           "Repeat the 1970s" = "#55B748",
           "RothIRA2" = "#55B748",
           "RothIRA2allpart" = "#55B748",
@@ -184,7 +179,7 @@ cols <- c("Baseline" = "#1696d2",
           "SAVEopt3b" = "#55B748",
           "SAVEopt4" = "#55B748",
           "SAVEopt4b" = "#55B748",
-          "BPC package" = "#55B748")
+          "Bipartisan Policy Center package" = "#55B748")
 
 ##
 ## Shiny
@@ -195,6 +190,8 @@ latoCSS <- "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300itali
 ui <- fluidPage(
   
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = latoCSS)),
+  tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.css")),  
+  tags$head(tags$base(target = "_blank")),  
   tags$head(tags$script(src = "pym.min.js")),
   
   theme = "shiny.css",
@@ -241,12 +238,8 @@ ui <- fluidPage(
                                    "No target-date funds" = "No target-date funds",
                                    "No auto-enrollment" = "No auto-enrollment",
                                    "No cash outs" = "No cash outs",
-                                   "All Roth-401(K) accounts #1" = "All Roth-401(K) accounts #1",
-                                   "All Roth-401(K) accounts #2" = "All Roth-401(K) accounts #2",
-#                                   "Mandated employer plans (60%)" = "Mandated employer plans (60%)",
-#                                   "Mandated employer plans (100%)" = "Mandated employer plans (100%)",
                                    "Repeat the 1970s" = "Repeat the 1970s",
-                                   "BPC package" = "BPC package",
+                                   "Bipartisan Policy Center package" = "Bipartisan Policy Center package",
                                    "RothIRA2" = "RothIRA2",
                                    "RothIRA2allpart" = "RothIRA2allpart",
                                    "RothIRA2b" = "RothIRA2b",
@@ -327,11 +320,11 @@ ui <- fluidPage(
     column(6,
            checkboxGroupInput(inputId = "data_source", 
                               label = "Validation Data",
-                              choices = c("Baseline" = "Baseline",
-                                          "HRS" = "HRS",
-                                          "PSID" = "PSID",
-                                          "SCF" = "SCF",
-                                          "SIPP" = "SIPP"), 
+                              choices = c("Health and Retirement Study" = "HRS",
+                                          "Panel Study of Income Dynamics" = "PSID",
+                                          "Survey of Consumer Finances" = "SCF",
+                                          "Survey of Income and Program Participation" = "SIPP",
+                                          "Baseline" = "Baseline"), 
                               selected = c("Baseline", "HRS", "PSID", "SCF", "SIPP"))
     )
   
@@ -373,24 +366,24 @@ ui <- fluidPage(
     column(12,
            
       HTML("<h4><a href='http://hrsonline.isr.umich.edu/'>Health and Retirement 
-           Study:</a></h4><p>A national longitudinal study of approximately 
+           Study</a></h4><p>A national longitudinal study of approximately 
            20,000 respondents age 50 and older that asks questions about 
            assets, health care, housing, and pensions. The study is conducted 
            every two years and began in 1992.</p>"),
       HTML("<h4><a href='https://psidonline.isr.umich.edu/'>Panel Study of 
-           Income Dynamics:</a></h4><p>A national longitudinal study of more 
+           Income Dynamics</a></h4><p>A national longitudinal study of more 
            than 18,000 individuals in 5,000 families that asks questions about 
            employment, income, wealth, expenditures, health, marriage, 
            childbearing, child development, philanthropy, and education. 
            Families were asked questions annually from 1968 to 1997 and every 
            other year after 1997.</p> "),
-      HTML("<h4><a href='https://www.federalreserve.gov/econres/scfindex.htm'>Survey of Consumer Finances:</a></h4>
+      HTML("<h4><a href='https://www.federalreserve.gov/econres/scfindex.htm'>Survey of Consumer Finances</a></h4>
            <p>A national cross-sectional study of approximately 6,500 families 
            that focuses on balance sheets, pensions, income, and demographic 
            characteristics. The survey is conducted every three years and began 
            in 1983.</p> "),
       HTML("<h4><a href='https://www.census.gov/sipp/'>Survey of Income and 
-           Program Participation:</a></h4><p>A continuous series of national 
+           Program Participation</a></h4><p>A continuous series of national 
            panels of 14,000 to 52,000 households that focuses on the interaction 
            between tax, transfer, and other government and private policies. 
            The survey began in 1983 and includes monthly data.</p>")
@@ -400,6 +393,40 @@ ui <- fluidPage(
   ),
   
   br(),
+  
+  fluidRow(
+    column(6,
+           h3("About the data"),
+           HTML("<p>The Urban Institute’s Dynamic Simulation of Income Model (DYNASIM) projects the size and characteristics (such as financial, health, and disability status) 
+                of the US population for the next 75 years. Using the best and most recent data available, it helps sort out how profound social, economic, and demographic 
+                shifts will likely affect older adults and their retirement as well as taxpayers, business, and government. The model can also show how outcomes would likely 
+                evolve under changes to public policies, business practices, or individual behaviors.</p>"),
+           HTML("<p><a href='https://www.urban.org/node/65826'>Read the DYNASIM primer</a></p>"),
+           HTML("<p><a href='https://www.urban.org/research/publication/dynamic-simulation-income-model-dynasim-overview'>Review the DYNASIM documentation</a></p>"),
+           HTML("<p>Questions about DYNASIM? <a href='mailto:retirementpolicy@urban.org' target='_self'>Contact us</a>.</p>")
+           
+           ),
+    column(6,
+           h3("Project Credits"),
+           HTML("<p><i>This work was funded by the US Department of Labor’s Employee Benefits Security Administration. 
+                We are grateful to them and to all our funders, who make it possible for Urban Institute to advance its mission.</i></p> 
+                <p><i>The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, 
+                or its funders. Funders do not determine research findings or the insights and recommendations of our experts. 
+                More information on our funding principles is available <a href='https://www.urban.org/support'>here</a>. 
+                Read our terms of service <a href='https://www.urban.org/terms-service'>here</a></i>.</p>"),
+           
+           h5(HTML("<div class='credit-labels'>RESEARCH")),
+           HTML("<div class='credit-names'><p><a href='https://www.urban.org/author/karen-e-smith'>Karen Smith</a></p></div>"),
+           h5(HTML("<div class='credit-labels'>DESIGN AND DEVELOPMENT")),
+           HTML("<div class='credit-names'><p><a href='https://www.urban.org/author/aaron-r-williams'>Aaron Williams</a>, <a href='https://www.urban.org/author/jerry-ta'>Jerry Ta</a>, and <a href='https://www.urban.org/author/benjamin-chartoff'>Ben Chartoff</a></p></div>"),
+           h5(HTML("<div class='credit-labels'>EDITING")),
+           HTML("<div class='credit-names'><p><a href='https://www.urban.org/author/michael-marazzi'>Michael Marazzi</a></p></div>"),
+           h5(HTML("<div class='credit-labels'>WRITING")),
+           HTML("<div class='credit-names'><p><a href = 'https://www.urban.org/author/karen-e-smith'>Karen Smith</a> and <a href='https://www.urban.org/author/aaron-r-williams'>Aaron Williams</a></p></div>"),
+           
+           HTML("Copyright &copy; <a href='https://www.urban.org/'>Urban Institute</a> September 2017. View this project on <a href='https://github.com/urbaninstitute/dynasim-shiny1.git'>GitHub</a>.</p>")
+           )
+    ),
   
   tags$script(src = "activatePym.js")
 )
